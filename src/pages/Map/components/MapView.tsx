@@ -32,7 +32,7 @@ function makeIcon(color: string, size = 28) {
 const incidentIcon = L.divIcon({
   html: `
     <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36">
-      <circle cx="18" cy="18" r="16" fill="#EF4444" fill-opacity="0.15" stroke="#EF4444" stroke-width="2"/>
+      <circle class="incident-pulse-ring" cx="18" cy="18" r="16" fill="#EF4444" fill-opacity="0.15" stroke="#EF4444" stroke-width="2"/>
       <circle cx="18" cy="18" r="8" fill="#EF4444"/>
       <circle cx="18" cy="18" r="3" fill="white"/>
     </svg>`,
@@ -71,6 +71,26 @@ const FlyTo = ({ lat, lng, trigger }: FlyToProps) => {
       prevTrigger.current = trigger
     }
   }, [map, lat, lng, trigger])
+  return null
+}
+
+interface FitToRadiusProps {
+  incident: { lat: number; lng: number } | null
+  radiusM: number
+}
+
+const FitToRadius = ({ incident, radiusM }: FitToRadiusProps) => {
+  const map = useMap()
+  useEffect(() => {
+    if (!incident) return
+    const latDelta = radiusM / 111320
+    const lngDelta = radiusM / (111320 * Math.cos(incident.lat * Math.PI / 180))
+    const bounds = L.latLngBounds(
+      [incident.lat - latDelta, incident.lng - lngDelta],
+      [incident.lat + latDelta, incident.lng + lngDelta],
+    )
+    map.fitBounds(bounds, { padding: [50, 50], animate: true, duration: 0.8 })
+  }, [map, incident, radiusM])
   return null
 }
 
@@ -115,6 +135,8 @@ export const MapView = ({
         <FlyTo lat={flyTarget.lat} lng={flyTarget.lng} trigger={flyTarget.trigger} />
       )}
 
+      <FitToRadius incident={incident} radiusM={radiusM} />
+
       {/* Incident marker + radius */}
       {incident && (
         <>
@@ -122,6 +144,11 @@ export const MapView = ({
             center={[incident.lat, incident.lng]}
             radius={radiusM}
             pathOptions={{ color: '#EF4444', fillColor: '#EF4444', fillOpacity: 0.08, weight: 2, dashArray: '6 4' }}
+          />
+          <Circle
+            center={[incident.lat, incident.lng]}
+            radius={radiusM * 0.4}
+            pathOptions={{ color: 'transparent', fillColor: '#EF4444', fillOpacity: 0.2, weight: 0 }}
           />
           <Marker position={[incident.lat, incident.lng]} icon={incidentIcon} zIndexOffset={1000}>
             <Popup>

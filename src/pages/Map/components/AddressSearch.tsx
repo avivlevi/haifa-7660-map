@@ -320,7 +320,7 @@ export const AddressSearch = ({ onSelect, placeholder = 'חפש כתובת בח�
 
       {open && suggestions.length > 0 && (
         <ul
-          className="absolute top-full mt-1 w-full bg-white rounded-xl shadow-lg border border-gray-200 z-[3000] overflow-hidden"
+          className="absolute top-full mt-1 w-full bg-white rounded-xl shadow-lg border border-gray-200 z-[3000] overflow-hidden dropdown-animate-in"
           style={{ direction: 'rtl' }}
         >
           {usingFallback && (

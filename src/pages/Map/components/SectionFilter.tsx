@@ -4,11 +4,18 @@ interface Props {
   active: Set<Section>
   onChange: (next: Set<Section>) => void
   wrap?: boolean
+  variant?: 'chips' | 'segmented'
 }
 
 const ALL_SECTIONS = Object.keys(SECTION_LABELS) as Section[]
 
-export const SectionFilter = ({ active, onChange, wrap = false }: Props) => {
+const SECTION_SHORT: Record<Section, string> = {
+  west_haifa:   'מערב',
+  ramat_carmel: 'כרמל',
+  tirat_carmel: 'טירת',
+}
+
+export const SectionFilter = ({ active, onChange, wrap = false, variant = 'chips' }: Props) => {
   const toggle = (sec: Section) => {
     const next = new Set(active)
     if (next.has(sec)) {
@@ -22,6 +29,37 @@ export const SectionFilter = ({ active, onChange, wrap = false }: Props) => {
   const allOn = active.size === ALL_SECTIONS.length
   const toggleAll = () => {
     onChange(allOn ? new Set() : new Set(ALL_SECTIONS))
+  }
+
+  if (variant === 'segmented') {
+    return (
+      <div className="flex bg-black/[0.06] rounded-xl p-1 gap-0.5" style={{ direction: 'rtl' }}>
+        <button
+          onClick={toggleAll}
+          className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all active:scale-95 ${
+            allOn ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500'
+          }`}
+        >
+          הכל
+        </button>
+        {ALL_SECTIONS.map(sec => {
+          const on = active.has(sec)
+          return (
+            <button
+              key={sec}
+              onClick={() => toggle(sec)}
+              className="flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all active:scale-95"
+              style={{
+                backgroundColor: on && !allOn ? SECTION_COLORS[sec] : 'transparent',
+                color: on && !allOn ? 'white' : '#6B7280',
+              }}
+            >
+              {SECTION_SHORT[sec]}
+            </button>
+          )
+        })}
+      </div>
+    )
   }
 
   return (

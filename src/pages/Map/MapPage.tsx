@@ -8,6 +8,7 @@ import { AddressSearch } from './components/AddressSearch'
 import { useNearbyLocations, useAllLocations } from './hooks/useNearbyLocations'
 import type { Category, Section } from './data/locations'
 import { MapPin } from 'lucide-react'
+import { MobileFilterButton, MobileFilterPanel } from './components/MobileFilters'
 
 const ALL_CATEGORIES = new Set<Category>([
   'hospital', 'emergency', 'nursing_home', 'shelter',
@@ -21,9 +22,10 @@ export const MapPage = () => {
   const [activeSections, setActiveSections]     = useState<Set<Section>>(ALL_SECTIONS)
   const [incident, setIncident]                 = useState<{ lat: number; lng: number } | null>(null)
   const [incidentAddress, setIncidentAddress]   = useState('')
-  const [radiusM, setRadiusM]                   = useState(1000)
+  const [radiusM, setRadiusM]                   = useState(500)
   const [selectedId, setSelectedId]             = useState<string | null>(null)
   const [flyTarget, setFlyTarget]               = useState<{ lat: number; lng: number; trigger: number } | null>(null)
+  const [filtersOpen, setFiltersOpen]           = useState(false)
 
   const allLocations = useAllLocations(activeCategories, activeSections)
   const nearby = useNearbyLocations(incident, radiusM, activeCategories, activeSections)
@@ -32,6 +34,7 @@ export const MapPage = () => {
     setIncident({ lat, lng })
     setIncidentAddress(`${lat.toFixed(5)}, ${lng.toFixed(5)}`)
     setSelectedId(null)
+    setRadiusM(500)
   }, [])
 
   const handleAddressSelect = useCallback((lat: number, lng: number, label: string) => {
@@ -80,8 +83,9 @@ export const MapPage = () => {
       <div
         className="hidden md:flex flex-col absolute start-0 top-0 h-full z-[2000]"
         style={{ width: 320 }}
+        onClick={e => e.stopPropagation()}
       >
-        <div className="flex flex-col h-full bg-white/95 backdrop-blur shadow-xl border-e border-gray-200 overflow-hidden">
+        <div className="flex flex-col h-full bg-white/95 backdrop-blur-xl shadow-xl border-e border-gray-200 overflow-hidden">
 
           {/* Search */}
           <div className="p-3 border-b border-gray-100 shrink-0">
@@ -100,9 +104,22 @@ export const MapPage = () => {
             <CategoryFilter active={activeCategories} onChange={setActiveCategories} wrap />
           </div>
 
-          {/* Nearby list or placeholder */}
-          {incident ? (
-            <div className="flex-1 flex flex-col overflow-hidden">
+          {/* Nearby list / placeholder — cross-fade */}
+          <div className="flex-1 flex flex-col overflow-hidden relative">
+            {/* Placeholder fades out */}
+            <div
+              className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 gap-3 p-6 transition-opacity duration-500"
+              style={{ opacity: incident ? 0 : 1, pointerEvents: incident ? 'none' : 'auto' }}
+            >
+              <MapPin className="h-10 w-10 opacity-25" />
+              <p className="text-sm text-center">לחץ על המפה לסימון נקודת פגיעה</p>
+            </div>
+
+            {/* NearbyList fades in */}
+            <div
+              className="flex flex-col overflow-hidden h-full transition-opacity duration-500"
+              style={{ opacity: incident ? 1 : 0, pointerEvents: incident ? 'auto' : 'none' }}
+            >
               <NearbyList
                 locations={nearby}
                 selectedId={selectedId}
@@ -114,43 +131,63 @@ export const MapPage = () => {
                 fillHeight
               />
             </div>
-          ) : (
-            <div className="flex-1 flex flex-col items-center justify-center text-gray-400 gap-3 p-6">
-              <MapPin className="h-10 w-10 opacity-25" />
-              <p className="text-sm text-center">לחץ על המפה לסימון נקודת פגיעה</p>
-            </div>
-          )}
+          </div>
         </div>
       </div>
 
       {/* ══════════════════════════════════════════
           MOBILE: top overlay (search + filters)
       ══════════════════════════════════════════ */}
-      <div className="md:hidden absolute top-3 inset-x-3 z-[2000] flex flex-col gap-2">
-        <AddressSearch onSelect={handleAddressSelect} />
-        <div className="bg-white/90 backdrop-blur rounded-xl shadow-md border border-gray-200 px-3 py-2 flex flex-col gap-2">
-          <SectionFilter active={activeSections} onChange={setActiveSections} />
-          <div className="border-t border-gray-100" />
-          <CategoryFilter active={activeCategories} onChange={setActiveCategories} />
+      <div
+        className="md:hidden absolute top-3 inset-x-3 z-[2000] flex flex-col gap-2"
+        onClick={e => e.stopPropagation()}
+      >
+        {/* Row: search + hamburger */}
+        <div className="flex gap-2 items-center">
+          <div className="flex-1">
+            <AddressSearch onSelect={handleAddressSelect} />
+          </div>
+          <MobileFilterButton
+            open={filtersOpen}
+            isFiltered={activeCategories.size < 9 || activeSections.size < 3}
+            onToggle={() => setFiltersOpen(o => !o)}
+          />
+        </div>
+
+        {/* Full-width collapsible panel */}
+        <div
+          className="grid transition-grid duration-300 ease-ios"
+          style={{ gridTemplateRows: filtersOpen ? '1fr' : '0fr' }}
+        >
+          <div className="overflow-hidden">
+            <MobileFilterPanel
+              activeSections={activeSections}
+              onSectionsChange={setActiveSections}
+              activeCategories={activeCategories}
+              onCategoriesChange={setActiveCategories}
+            />
+          </div>
         </div>
       </div>
 
       {/* ══════════════════════════════════════════
-          MOBILE: bottom sheet (nearby list)
+          MOBILE: bottom sheet — always mounted, slides up
       ══════════════════════════════════════════ */}
-      {incident && (
-        <div className="md:hidden absolute bottom-0 inset-x-0 z-[2000]">
-          <NearbyList
-            locations={nearby}
-            selectedId={selectedId}
-            onSelect={handleLocationSelect}
-            radiusM={radiusM}
-            onRadiusChange={setRadiusM}
-            incidentAddress={incidentAddress}
-            onClear={clearIncident}
-          />
-        </div>
-      )}
+      <div
+        className="md:hidden absolute bottom-0 inset-x-0 z-[2000] transition-transform duration-500 ease-ios"
+        style={{ transform: incident ? 'translateY(0)' : 'translateY(110%)', pointerEvents: incident ? 'auto' : 'none' }}
+        onClick={e => e.stopPropagation()}
+      >
+        <NearbyList
+          locations={nearby}
+          selectedId={selectedId}
+          onSelect={handleLocationSelect}
+          radiusM={radiusM}
+          onRadiusChange={setRadiusM}
+          incidentAddress={incidentAddress}
+          onClear={clearIncident}
+        />
+      </div>
     </div>
   )
 }

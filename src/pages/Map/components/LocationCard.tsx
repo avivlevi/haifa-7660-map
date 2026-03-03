@@ -1,3 +1,4 @@
+import type React from 'react'
 import { Phone, MapPin, Users } from 'lucide-react'
 import type { LocationWithDistance } from '../hooks/useNearbyLocations'
 import { CATEGORY_LABELS, CATEGORY_COLORS } from '../data/locations'
@@ -6,6 +7,8 @@ interface Props {
   location: LocationWithDistance
   onClick: () => void
   selected: boolean
+  className?: string
+  style?: React.CSSProperties
 }
 
 function formatDistance(m: number): string {
@@ -13,17 +16,18 @@ function formatDistance(m: number): string {
   return `${(m / 1000).toFixed(1)} ק"מ`
 }
 
-export const LocationCard = ({ location, onClick, selected }: Props) => {
+export const LocationCard = ({ location, onClick, selected, className = '', style: extraStyle }: Props) => {
   const color = CATEGORY_COLORS[location.category]
 
   return (
     <button
       onClick={onClick}
-      className="w-full text-right p-3 rounded-xl border transition-all hover:shadow-md active:scale-95"
+      className={`w-full text-right p-3 rounded-xl border transition-all hover:shadow-md active:scale-95 ${className}`}
       style={{
         backgroundColor: selected ? `${color}15` : 'white',
         borderColor: selected ? color : '#e2e8f0',
         direction: 'rtl',
+        ...extraStyle,
       }}
     >
       <div className="flex items-start gap-3">
