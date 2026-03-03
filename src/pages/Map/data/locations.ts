@@ -1,3 +1,6 @@
+import { Hospital, Siren, Heart, Shield, Bus, GraduationCap, Users, ShoppingBasket, Fuel } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
+
 export type Category =
   | 'hospital'
   | 'emergency'
@@ -46,6 +49,18 @@ export const CATEGORY_COLORS: Record<Category, string> = {
   community:   '#14B8A6', // teal
   food:        '#22C55E', // green
   gas:         '#6B7280', // gray
+}
+
+export const CATEGORY_ICONS: Record<Category, LucideIcon> = {
+  hospital:     Hospital,
+  emergency:    Siren,
+  nursing_home: Heart,
+  shelter:      Shield,
+  evacuation:   Bus,
+  school:       GraduationCap,
+  community:    Users,
+  food:         ShoppingBasket,
+  gas:          Fuel,
 }
 
 export const SECTION_LABELS: Record<Section, string> = {

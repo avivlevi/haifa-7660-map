@@ -14,12 +14,11 @@ interface Props {
   fillHeight?: boolean
 }
 
-const RADII = [500, 1000, 2000, 5000]
+const RADII = [500, 1000, 2000]
 const RADIUS_LABELS: Record<number, string> = {
-  500:  '500 מ\'',
+  500:  '500מ\'',
   1000: '1 ק"מ',
   2000: '2 ק"מ',
-  5000: '5 ק"מ',
 }
 
 export const NearbyList = ({
@@ -36,7 +35,6 @@ export const NearbyList = ({
   const touchStartY = useRef(0)
   const didDrag = useRef(false)
 
-  // Collapse whenever a new incident is set
   useEffect(() => {
     setExpanded(false)
   }, [incidentAddress])
@@ -61,19 +59,19 @@ export const NearbyList = ({
 
   return (
     <div
-      className="flex flex-col bg-white/95 backdrop-blur-xl rounded-t-3xl md:rounded-2xl shadow-2xl overflow-hidden"
+      className="flex flex-col bg-white/95 backdrop-blur-xl rounded-t-2xl md:rounded-xl shadow-2xl overflow-hidden"
       style={{ direction: 'rtl' }}
     >
       {/* Drag handle — mobile only */}
       <div
-        className="md:hidden flex justify-center pt-3 pb-1 cursor-grab touch-none"
+        className="md:hidden flex justify-center pt-2 pb-0.5 cursor-grab touch-none"
         onTouchStart={handleTouchStart}
         onTouchEnd={handleTouchEnd}
       >
-        <div className="w-9 h-1 rounded-full bg-gray-300" />
+        <div className="w-8 h-[3px] rounded-full bg-gray-200" />
       </div>
 
-      {/* Header */}
+      {/* Header — production size */}
       <div
         className="flex items-center justify-between px-4 py-3 cursor-pointer select-none"
         onClick={handleHeaderClick}
@@ -83,18 +81,19 @@ export const NearbyList = ({
         tabIndex={0}
         onKeyDown={e => e.key === 'Enter' && handleHeaderClick()}
       >
-        <div className="flex items-center gap-2.5">
+        <div className="flex items-center gap-2.5 min-w-0">
           <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center shrink-0">
             <AlertCircle className="h-4 w-4 text-red-500" />
           </div>
-          <div className="text-right">
+          <div className="text-right min-w-0">
             <p className="text-sm font-bold text-gray-900 leading-tight">מקומות בסביבה</p>
             {incidentAddress && (
-              <p className="text-xs text-gray-400 truncate max-w-[190px] leading-tight">{incidentAddress}</p>
+              <p className="text-xs text-gray-400 truncate max-w-[160px] leading-tight">{incidentAddress}</p>
             )}
           </div>
         </div>
-        <div className="flex items-center gap-2">
+
+        <div className="flex items-center gap-2 shrink-0">
           <span className="text-xs font-bold text-white bg-red-500 rounded-full px-2 py-0.5 min-w-[24px] text-center">
             {locations.length}
           </span>
@@ -105,36 +104,33 @@ export const NearbyList = ({
           >
             <X className="h-3.5 w-3.5" />
           </button>
-          <div className="w-6 h-6 rounded-full bg-gray-100 flex items-center justify-center">
-            {expanded
-              ? <ChevronDown className="h-3.5 w-3.5 text-gray-500" />
-              : <ChevronUp   className="h-3.5 w-3.5 text-gray-500" />
-            }
-          </div>
+          {expanded
+            ? <ChevronDown className="h-4 w-4 text-gray-400" />
+            : <ChevronUp   className="h-4 w-4 text-gray-400" />
+          }
         </div>
       </div>
 
-      {/* Animated expand/collapse — iOS spring */}
+      {/* Animated expand/collapse */}
       <div
         className="grid transition-grid duration-500 ease-ios"
         style={{ gridTemplateRows: expanded ? '1fr' : '0fr' }}
       >
         <div className="overflow-hidden flex flex-col min-h-0">
-          {/* Divider */}
           <div className="mx-4 border-t border-gray-100" />
 
           {/* Radius selector */}
-          <div className="flex gap-2 px-4 pt-3 pb-2 overflow-x-auto scrollbar-none">
-            <span className="text-xs text-gray-400 self-center shrink-0 font-medium">רדיוס:</span>
+          <div className="flex gap-2 px-4 pt-2.5 pb-1.5 items-center">
+            <span className="text-xs text-gray-400 font-medium shrink-0">רדיוס:</span>
             {RADII.map(r => (
               <button
                 key={r}
                 onClick={() => onRadiusChange(r)}
-                className="shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all active:scale-90"
+                className="shrink-0 px-3 py-1 rounded-full text-xs font-semibold transition-all active:scale-90"
                 style={{
                   backgroundColor: radiusM === r ? '#3B82F6' : '#F1F5F9',
                   color: radiusM === r ? 'white' : '#64748B',
-                  boxShadow: radiusM === r ? '0 2px 8px rgba(59,130,246,0.35)' : 'none',
+                  boxShadow: radiusM === r ? '0 2px 8px rgba(59,130,246,0.3)' : 'none',
                 }}
               >
                 {RADIUS_LABELS[r]}
@@ -144,13 +140,13 @@ export const NearbyList = ({
 
           {/* Location list */}
           <div
-            className="overflow-y-auto flex-1 px-3 pb-3 pt-1 space-y-2"
-            style={fillHeight ? undefined : { maxHeight: '55vh' }}
+            className="overflow-y-auto flex-1 px-2 py-2 space-y-1"
+            style={fillHeight ? undefined : { maxHeight: '160px' }}
           >
             {locations.length === 0 ? (
-              <div className="text-center py-10 text-gray-400 fade-in-delayed">
-                <MapPin className="h-8 w-8 mx-auto mb-2 opacity-30" />
-                <p className="text-sm">אין מקומות ברדיוס שנבחר</p>
+              <div className="text-center py-6 text-gray-400 fade-in-delayed">
+                <MapPin className="h-6 w-6 mx-auto mb-1.5 opacity-30" />
+                <p className="text-xs">אין מקומות ברדיוס שנבחר</p>
               </div>
             ) : (
               locations.map((loc, i) => (
@@ -160,7 +156,7 @@ export const NearbyList = ({
                   selected={selectedId === loc.id}
                   onClick={() => onSelect(loc.id, loc.lat, loc.lng)}
                   className="card-animate-in"
-                  style={{ '--card-delay': `${Math.min(i * 40, 300)}ms` } as React.CSSProperties}
+                  style={{ '--card-delay': `${Math.min(i * 30, 250)}ms` } as React.CSSProperties}
                 />
               ))
             )}

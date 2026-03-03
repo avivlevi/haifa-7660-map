@@ -1,5 +1,8 @@
 import { Menu, X } from 'lucide-react'
-import { SECTION_COLORS, CATEGORY_COLORS, type Category, type Section } from '../data/locations'
+import {
+  SECTION_COLORS, CATEGORY_COLORS, CATEGORY_ICONS,
+  type Category, type Section,
+} from '../data/locations'
 
 const ALL_SECTIONS: Section[] = ['west_haifa', 'ramat_carmel', 'tirat_carmel']
 const ALL_CATEGORIES: Category[] = [
@@ -9,9 +12,9 @@ const ALL_CATEGORIES: Category[] = [
 ]
 
 const SECTION_SHORT: Record<Section, string> = {
-  west_haifa:   'מערב',
-  ramat_carmel: 'כרמל',
-  tirat_carmel: 'טירת',
+  west_haifa:   'מערב חיפה',
+  ramat_carmel: 'רמות כרמל',
+  tirat_carmel: 'טירת הכרמל',
 }
 
 const CATEGORY_SHORT: Record<Category, string> = {
@@ -71,37 +74,30 @@ export const MobileFilterPanel = ({
     onCategoriesChange(next)
   }
 
-  const allSections   = activeSections.size   === ALL_SECTIONS.length
-  const allCategories = activeCategories.size === ALL_CATEGORIES.length
-
   return (
-    <div className="bg-white rounded-xl shadow-lg border border-gray-100 p-4 flex flex-col gap-4" style={{ direction: 'rtl' }}>
-
+    <div
+      className="bg-white/95 backdrop-blur-xl rounded-xl shadow-lg border border-gray-100 px-3 py-2.5 flex flex-col gap-2"
+      style={{ direction: 'rtl' }}
+    >
       {/* Sections */}
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">אזורים</p>
-          <button
-            onClick={() => onSectionsChange(allSections ? new Set() : new Set(ALL_SECTIONS))}
-            className="text-[10px] text-blue-500 font-semibold"
-          >
-            {allSections ? 'נקה' : 'הכל'}
-          </button>
-        </div>
-        <div className="flex gap-2">
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-gray-400 font-medium shrink-0">אזורים:</span>
+        <div className="flex gap-1.5">
           {ALL_SECTIONS.map(sec => {
             const on = activeSections.has(sec)
+            const color = SECTION_COLORS[sec]
             return (
               <button
                 key={sec}
                 onClick={() => toggleSection(sec)}
-                className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg transition-all active:scale-95"
-                style={{ backgroundColor: on ? `${SECTION_COLORS[sec]}18` : '#F8FAFC' }}
+                className="shrink-0 px-3 py-1 rounded-full text-xs font-medium transition-all active:scale-90"
+                style={{
+                  backgroundColor: on ? `${color}15` : '#F8FAFC',
+                  color: on ? color : '#94A3B8',
+                  border: `1px solid ${on ? `${color}40` : '#E2E8F0'}`,
+                }}
               >
-                <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: on ? SECTION_COLORS[sec] : '#CBD5E1' }} />
-                <span className="text-xs font-semibold" style={{ color: on ? SECTION_COLORS[sec] : '#94A3B8' }}>
-                  {SECTION_SHORT[sec]}
-                </span>
+                {SECTION_SHORT[sec]}
               </button>
             )
           })}
@@ -110,40 +106,32 @@ export const MobileFilterPanel = ({
 
       <div className="border-t border-gray-100" />
 
-      {/* Categories */}
-      <div>
-        <div className="flex items-center justify-between mb-2">
-          <p className="text-[10px] font-bold uppercase tracking-widest text-gray-400">קטגוריות</p>
-          <button
-            onClick={() => onCategoriesChange(allCategories ? new Set() : new Set(ALL_CATEGORIES))}
-            className="text-[10px] text-blue-500 font-semibold"
-          >
-            {allCategories ? 'נקה' : 'הכל'}
-          </button>
-        </div>
-        <div className="grid grid-cols-3 gap-1.5">
+      {/* Categories — icon chips, horizontal scroll */}
+      <div className="flex items-center gap-2">
+        <span className="text-xs text-gray-400 font-medium shrink-0">קטגוריות:</span>
+        <div className="flex gap-1.5 overflow-x-auto scrollbar-none">
           {ALL_CATEGORIES.map(cat => {
             const on = activeCategories.has(cat)
+            const color = CATEGORY_COLORS[cat]
+            const Icon = CATEGORY_ICONS[cat]
             return (
               <button
                 key={cat}
                 onClick={() => toggleCategory(cat)}
-                className="flex items-center gap-1.5 px-2 py-1.5 rounded-lg transition-all active:scale-95"
-                style={{ backgroundColor: on ? `${CATEGORY_COLORS[cat]}15` : '#F8FAFC' }}
+                className="shrink-0 flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium transition-all active:scale-90"
+                style={{
+                  backgroundColor: on ? `${color}15` : '#F8FAFC',
+                  color: on ? color : '#94A3B8',
+                  border: `1px solid ${on ? `${color}40` : '#E2E8F0'}`,
+                }}
               >
-                <span className="shrink-0 w-2 h-2 rounded-full" style={{ backgroundColor: on ? CATEGORY_COLORS[cat] : '#CBD5E1' }} />
-                <span
-                  className="text-[11px] leading-tight truncate"
-                  style={{ color: on ? '#1E293B' : '#94A3B8', fontWeight: on ? 600 : 400 }}
-                >
-                  {CATEGORY_SHORT[cat]}
-                </span>
+                <Icon className="h-3 w-3" />
+                {CATEGORY_SHORT[cat]}
               </button>
             )
           })}
         </div>
       </div>
-
     </div>
   )
 }

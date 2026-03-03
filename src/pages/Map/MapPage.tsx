@@ -142,7 +142,6 @@ export const MapPage = () => {
         className="md:hidden absolute top-3 inset-x-3 z-[2000] flex flex-col gap-2"
         onClick={e => e.stopPropagation()}
       >
-        {/* Row: search + hamburger */}
         <div className="flex gap-2 items-center">
           <div className="flex-1">
             <AddressSearch onSelect={handleAddressSelect} />
@@ -154,7 +153,6 @@ export const MapPage = () => {
           />
         </div>
 
-        {/* Full-width collapsible panel */}
         <div
           className="grid transition-grid duration-300 ease-ios"
           style={{ gridTemplateRows: filtersOpen ? '1fr' : '0fr' }}

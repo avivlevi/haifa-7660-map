@@ -10,9 +10,9 @@ interface Props {
 const ALL_SECTIONS = Object.keys(SECTION_LABELS) as Section[]
 
 const SECTION_SHORT: Record<Section, string> = {
-  west_haifa:   'מערב',
-  ramat_carmel: 'כרמל',
-  tirat_carmel: 'טירת',
+  west_haifa:   'מערב חיפה',
+  ramat_carmel: 'רמות כרמל',
+  tirat_carmel: 'טירת הכרמל',
 }
 
 export const SectionFilter = ({ active, onChange, wrap = false, variant = 'chips' }: Props) => {
@@ -36,7 +36,7 @@ export const SectionFilter = ({ active, onChange, wrap = false, variant = 'chips
       <div className="flex bg-black/[0.06] rounded-xl p-1 gap-0.5" style={{ direction: 'rtl' }}>
         <button
           onClick={toggleAll}
-          className={`flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all active:scale-95 ${
+          className={`flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-all active:scale-95 leading-tight ${
             allOn ? 'bg-white shadow-sm text-gray-800' : 'text-gray-500'
           }`}
         >
@@ -48,7 +48,7 @@ export const SectionFilter = ({ active, onChange, wrap = false, variant = 'chips
             <button
               key={sec}
               onClick={() => toggle(sec)}
-              className="flex-1 py-1.5 rounded-lg text-xs font-semibold transition-all active:scale-95"
+              className="flex-1 py-1.5 rounded-lg text-[11px] font-semibold transition-all active:scale-95 leading-tight"
               style={{
                 backgroundColor: on && !allOn ? SECTION_COLORS[sec] : 'transparent',
                 color: on && !allOn ? 'white' : '#6B7280',
