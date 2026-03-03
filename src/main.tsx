@@ -5,7 +5,8 @@ import './index.css'
 import App from './App'
 
 posthog.init(import.meta.env.VITE_POSTHOG_KEY as string, {
-  api_host: (import.meta.env.VITE_POSTHOG_HOST as string) ?? 'https://us.i.posthog.com',
+  api_host: '/ingest',
+  ui_host: 'https://us.posthog.com',
   capture_pageview: true,
   capture_pageleave: true,
 })
