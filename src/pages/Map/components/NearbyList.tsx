@@ -12,6 +12,8 @@ interface Props {
   incidentAddress: string
   onClear: () => void
   fillHeight?: boolean
+  defaultExpanded?: boolean
+  listMaxHeight?: number
 }
 
 const RADII = [500, 1000, 2000]
@@ -30,14 +32,16 @@ export const NearbyList = ({
   incidentAddress,
   onClear,
   fillHeight = false,
+  defaultExpanded = false,
+  listMaxHeight,
 }: Props) => {
-  const [expanded, setExpanded] = useState(false)
+  const [expanded, setExpanded] = useState(defaultExpanded)
   const touchStartY = useRef(0)
   const didDrag = useRef(false)
 
   useEffect(() => {
-    setExpanded(false)
-  }, [incidentAddress])
+    setExpanded(defaultExpanded)
+  }, [incidentAddress, defaultExpanded])
 
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartY.current = e.touches[0].clientY
@@ -59,7 +63,7 @@ export const NearbyList = ({
 
   return (
     <div
-      className="flex flex-col bg-white/95 backdrop-blur-xl rounded-t-2xl md:rounded-xl shadow-2xl overflow-hidden"
+      className="flex flex-col bg-white/95 backdrop-blur-xl rounded-t-2xl md:rounded-2xl shadow-2xl overflow-hidden"
       style={{ direction: 'rtl' }}
     >
       {/* Drag handle — mobile only */}
@@ -88,7 +92,7 @@ export const NearbyList = ({
           <div className="text-right min-w-0">
             <p className="text-sm font-bold text-gray-900 leading-tight">מקומות בסביבה</p>
             {incidentAddress && (
-              <p className="text-xs text-gray-400 truncate max-w-[160px] leading-tight">{incidentAddress}</p>
+              <p className="text-xs text-gray-400 truncate max-w-[200px] md:max-w-[320px] leading-tight">{incidentAddress}</p>
             )}
           </div>
         </div>
@@ -141,7 +145,7 @@ export const NearbyList = ({
           {/* Location list */}
           <div
             className="overflow-y-auto flex-1 px-2 py-2 space-y-1"
-            style={fillHeight ? undefined : { maxHeight: '160px' }}
+            style={fillHeight ? undefined : { maxHeight: `${listMaxHeight ?? 160}px` }}
           >
             {locations.length === 0 ? (
               <div className="text-center py-6 text-gray-400 fade-in-delayed">

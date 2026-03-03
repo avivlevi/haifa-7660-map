@@ -1,13 +1,10 @@
 import 'leaflet/dist/leaflet.css'
 import { useState, useCallback } from 'react'
 import { MapView } from './components/MapView'
-import { CategoryFilter } from './components/CategoryFilter'
-import { SectionFilter } from './components/SectionFilter'
 import { NearbyList } from './components/NearbyList'
 import { AddressSearch } from './components/AddressSearch'
 import { useNearbyLocations, useAllLocations } from './hooks/useNearbyLocations'
 import type { Category, Section } from './data/locations'
-import { MapPin } from 'lucide-react'
 import { MobileFilterButton, MobileFilterPanel } from './components/MobileFilters'
 
 const ALL_CATEGORIES = new Set<Category>([
@@ -78,68 +75,12 @@ export const MapPage = () => {
       </div>
 
       {/* ══════════════════════════════════════════
-          DESKTOP: full-height sidebar panel
+          TOP BAR — search + filter toggle
+          Mobile: full-width inset-x-3
+          Desktop: centered 520px floating
       ══════════════════════════════════════════ */}
       <div
-        className="hidden md:flex flex-col absolute start-0 top-0 h-full z-[2000]"
-        style={{ width: 320 }}
-        onClick={e => e.stopPropagation()}
-      >
-        <div className="flex flex-col h-full bg-white/95 backdrop-blur-xl shadow-xl border-e border-gray-200 overflow-hidden">
-
-          {/* Search */}
-          <div className="p-3 border-b border-gray-100 shrink-0">
-            <AddressSearch onSelect={handleAddressSelect} />
-          </div>
-
-          {/* Section filter */}
-          <div className="p-3 border-b border-gray-100 shrink-0">
-            <p className="text-xs text-gray-400 mb-2 font-medium">אזורים</p>
-            <SectionFilter active={activeSections} onChange={setActiveSections} wrap />
-          </div>
-
-          {/* Category filter */}
-          <div className="p-3 border-b border-gray-100 shrink-0">
-            <p className="text-xs text-gray-400 mb-2 font-medium">קטגוריות</p>
-            <CategoryFilter active={activeCategories} onChange={setActiveCategories} wrap />
-          </div>
-
-          {/* Nearby list / placeholder — cross-fade */}
-          <div className="flex-1 flex flex-col overflow-hidden relative">
-            {/* Placeholder fades out */}
-            <div
-              className="absolute inset-0 flex flex-col items-center justify-center text-gray-400 gap-3 p-6 transition-opacity duration-500"
-              style={{ opacity: incident ? 0 : 1, pointerEvents: incident ? 'none' : 'auto' }}
-            >
-              <MapPin className="h-10 w-10 opacity-25" />
-              <p className="text-sm text-center">לחץ על המפה לסימון נקודת פגיעה</p>
-            </div>
-
-            {/* NearbyList fades in */}
-            <div
-              className="flex flex-col overflow-hidden h-full transition-opacity duration-500"
-              style={{ opacity: incident ? 1 : 0, pointerEvents: incident ? 'auto' : 'none' }}
-            >
-              <NearbyList
-                locations={nearby}
-                selectedId={selectedId}
-                onSelect={handleLocationSelect}
-                radiusM={radiusM}
-                onRadiusChange={setRadiusM}
-                incidentAddress={incidentAddress}
-                onClear={clearIncident}
-                fillHeight
-              />
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* ══════════════════════════════════════════
-          MOBILE: top overlay (search + filters)
-      ══════════════════════════════════════════ */}
-      <div
-        className="md:hidden absolute top-3 inset-x-3 z-[2000] flex flex-col gap-2"
+        className="absolute top-3 inset-x-3 md:inset-x-auto md:left-1/2 md:-translate-x-1/2 md:w-[520px] z-[2000] flex flex-col gap-2"
         onClick={e => e.stopPropagation()}
       >
         <div className="flex gap-2 items-center">
@@ -169,7 +110,7 @@ export const MapPage = () => {
       </div>
 
       {/* ══════════════════════════════════════════
-          MOBILE: bottom sheet — always mounted, slides up
+          MOBILE: bottom sheet — slides up from below
       ══════════════════════════════════════════ */}
       <div
         className="md:hidden absolute bottom-0 inset-x-0 z-[2000] transition-transform duration-500 ease-ios"
@@ -184,6 +125,27 @@ export const MapPage = () => {
           onRadiusChange={setRadiusM}
           incidentAddress={incidentAddress}
           onClear={clearIncident}
+        />
+      </div>
+
+      {/* ══════════════════════════════════════════
+          DESKTOP: floating nearby panel — centered bottom
+      ══════════════════════════════════════════ */}
+      <div
+        className="hidden md:block absolute bottom-4 start-4 w-[360px] z-[2000] transition-opacity duration-500"
+        style={{ opacity: incident ? 1 : 0, pointerEvents: incident ? 'auto' : 'none' }}
+        onClick={e => e.stopPropagation()}
+      >
+        <NearbyList
+          locations={nearby}
+          selectedId={selectedId}
+          onSelect={handleLocationSelect}
+          radiusM={radiusM}
+          onRadiusChange={setRadiusM}
+          incidentAddress={incidentAddress}
+          onClear={clearIncident}
+          defaultExpanded
+          listMaxHeight={400}
         />
       </div>
     </div>
