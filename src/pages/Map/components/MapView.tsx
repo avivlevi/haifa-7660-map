@@ -1,5 +1,7 @@
-import { useEffect, useRef } from 'react'
+import { useEffect, useRef, createElement } from 'react'
+import { renderToStaticMarkup } from 'react-dom/server'
 import { Navigation2 } from 'lucide-react'
+import type { LucideIcon } from 'lucide-react'
 import { MapContainer, TileLayer, Marker, Popup, Circle, useMapEvents, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import type { Location } from '../data/locations'
@@ -14,18 +16,26 @@ import markerShadow from 'leaflet/dist/images/marker-shadow.png'
 delete (L.Icon.Default.prototype as { _getIconUrl?: unknown })._getIconUrl
 L.Icon.Default.mergeOptions({ iconUrl: markerIcon, iconRetinaUrl: markerIcon2x, shadowUrl: markerShadow })
 
-/** Create a colored SVG circle marker */
-function makeIcon(color: string, size = 28) {
-  const svg = `
-    <svg xmlns="http://www.w3.org/2000/svg" width="${size}" height="${size}" viewBox="0 0 ${size} ${size}">
-      <circle cx="${size / 2}" cy="${size / 2}" r="${size / 2 - 2}" fill="${color}" fill-opacity="0.9" stroke="white" stroke-width="2"/>
-    </svg>`
+/** Create a colored circle marker with a category icon inside */
+function makeIcon(color: string, Icon: LucideIcon, size = 30) {
+  const iconPx = Math.round(size * 0.46)
+  const iconHtml = renderToStaticMarkup(
+    createElement(Icon, { size: iconPx, color: 'white', strokeWidth: 2.5 })
+  )
+  const html = `<div style="
+    width:${size}px;height:${size}px;
+    background:${color};
+    border-radius:50%;
+    border:2.5px solid white;
+    box-shadow:0 2px 10px rgba(0,0,0,0.30);
+    display:flex;align-items:center;justify-content:center;
+  ">${iconHtml}</div>`
   return L.divIcon({
-    html: svg,
+    html,
     className: '',
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
-    popupAnchor: [0, -(size / 2)],
+    popupAnchor: [0, -(size / 2 + 4)],
   })
 }
 
@@ -166,15 +176,14 @@ export const MapView = ({
         const inRadius = nearbyIds.has(loc.id)
         const isSelected = selectedId === loc.id
         const color = CATEGORY_COLORS[loc.category]
-        const size = isSelected ? 34 : inRadius ? 28 : 22
-        const icon = makeIcon(color, size)
+        const size = isSelected ? 38 : inRadius ? 32 : 26
 
         const LocIcon = CATEGORY_ICONS[loc.category]
         return (
           <Marker
             key={loc.id}
             position={[loc.lat, loc.lng]}
-            icon={icon}
+            icon={makeIcon(color, LocIcon, size)}
             zIndexOffset={isSelected ? 900 : inRadius ? 500 : 0}
             opacity={incident && !inRadius ? 0.4 : 1}
             eventHandlers={{ click: () => onMarkerClick(loc.id) }}
