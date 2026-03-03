@@ -1,8 +1,9 @@
 import { useEffect, useRef } from 'react'
+import { Navigation2 } from 'lucide-react'
 import { MapContainer, TileLayer, Marker, Popup, Circle, useMapEvents, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import type { Location } from '../data/locations'
-import { CATEGORY_COLORS, CATEGORY_LABELS } from '../data/locations'
+import { CATEGORY_COLORS, CATEGORY_LABELS, CATEGORY_ICONS } from '../data/locations'
 import type { LocationWithDistance } from '../hooks/useNearbyLocations'
 
 // Fix Leaflet default icon paths broken by Vite
@@ -168,6 +169,7 @@ export const MapView = ({
         const size = isSelected ? 34 : inRadius ? 28 : 22
         const icon = makeIcon(color, size)
 
+        const LocIcon = CATEGORY_ICONS[loc.category]
         return (
           <Marker
             key={loc.id}
@@ -181,7 +183,7 @@ export const MapView = ({
               <div style={{ direction: 'rtl', textAlign: 'right', minWidth: 200, fontFamily: 'inherit' }}>
                 {/* Category badge */}
                 <span style={{
-                  display: 'inline-block',
+                  display: 'inline-flex', alignItems: 'center', gap: 4,
                   backgroundColor: `${color}20`,
                   color,
                   fontSize: 10,
@@ -191,6 +193,7 @@ export const MapView = ({
                   marginBottom: 5,
                   border: `1px solid ${color}40`,
                 }}>
+                  <LocIcon size={10} />
                   {CATEGORY_LABELS[loc.category]}
                 </span>
 
@@ -228,18 +231,40 @@ export const MapView = ({
                 )}
 
                 {/* Coordinates */}
-                <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: loc.notes ? 4 : 0 }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: loc.notes ? 4 : 8 }}>
                   <span style={{ fontSize: 12 }}>🗺️</span>
                   <span style={{ fontSize: 11, color: '#94a3b8' }}>{loc.lat.toFixed(5)}, {loc.lng.toFixed(5)}</span>
                 </div>
 
                 {/* Notes */}
                 {loc.notes && (
-                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 5 }}>
+                  <div style={{ display: 'flex', alignItems: 'flex-start', gap: 5, marginBottom: 8 }}>
                     <span style={{ fontSize: 12 }}>📝</span>
                     <span style={{ fontSize: 11, color: '#64748b', fontStyle: 'italic' }}>{loc.notes}</span>
                   </div>
                 )}
+
+                {/* Navigate button */}
+                <a
+                  href={`https://www.google.com/maps/dir/?api=1&destination=${loc.lat},${loc.lng}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6,
+                    backgroundColor: color,
+                    color: 'white',
+                    fontSize: 12,
+                    fontWeight: 600,
+                    padding: '7px 12px',
+                    borderRadius: 8,
+                    textDecoration: 'none',
+                    width: '100%',
+                    boxSizing: 'border-box',
+                  }}
+                >
+                  <Navigation2 size={13} />
+                  נווט בגוגל מפות
+                </a>
               </div>
             </Popup>
           </Marker>
