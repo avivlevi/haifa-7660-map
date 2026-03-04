@@ -90,7 +90,7 @@ export const NearbyList = ({
 
   return (
     <div
-      className={`flex flex-col bg-white/95 backdrop-blur-xl rounded-t-2xl md:rounded-2xl shadow-2xl overflow-hidden${mobileSheet ? ' h-full' : ''}`}
+      className={`flex flex-col bg-white backdrop-blur-xl rounded-t-2xl md:rounded-2xl shadow-2xl overflow-hidden${mobileSheet ? ' h-full' : ''}`}
       style={{ direction: 'rtl' }}
     >
       {/* Drag handle — mobile only */}
