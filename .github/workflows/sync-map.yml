@@ -6,7 +6,7 @@ on:
     paths: ['src/pages/Map/**']   # only fires when Map files change
 
 jobs:
-  sync:
+  sync-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -31,3 +31,26 @@ jobs:
           git add src/pages/Map
           git diff --staged --quiet || git commit -m "sync: map from haifa-7660-map"
           git push
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Install dependencies
+        working-directory: miluim
+        run: npm ci
+
+      - name: Build
+        working-directory: miluim
+        env:
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
+          VITE_HERE_APP_ID: ${{ secrets.VITE_HERE_APP_ID }}
+          VITE_HERE_APP_CODE: ${{ secrets.VITE_HERE_APP_CODE }}
+        run: npm run build
+
+      - name: Deploy to Netlify
+        working-directory: miluim
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+        run: npx netlify-cli deploy --prod --dir=dist --site=373cc9c2-2790-4c3e-9cea-42684ea479f7
