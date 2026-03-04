@@ -100,7 +100,7 @@ export const NearbyList = ({
         onTouchMove={mobileSheet ? msTouchMove : undefined}
         onTouchEnd={mobileSheet ? msTouchEnd : handleTouchEnd}
       >
-        <div className="w-8 h-[3px] rounded-full bg-gray-200" />
+        <div className="w-10 h-[4px] rounded-full bg-gray-300" />
       </div>
 
       {/* Header row */}
