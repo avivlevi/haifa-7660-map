@@ -1,5 +1,5 @@
 import 'leaflet/dist/leaflet.css'
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useEffect, useRef } from 'react'
 import { MapView } from './components/MapView'
 import { NearbyList } from './components/NearbyList'
 import { AddressSearch } from './components/AddressSearch'
@@ -14,6 +14,10 @@ const ALL_CATEGORIES = new Set<Category>([
 
 const ALL_SECTIONS = new Set<Section>(['west_haifa', 'ramat_carmel', 'tirat_carmel'])
 
+const SHEET_HEADER_H   = 76  // collapsed: just drag handle + header row
+const SHEET_DEFAULT_H  = 290 // tap-to-expand: header + radius bar + ~160px list
+const SHEET_MAX_FRAC   = 0.78 // max sheet via drag = 78% of viewport height
+
 export const MapPage = () => {
   const [activeCategories, setActiveCategories] = useState<Set<Category>>(ALL_CATEGORIES)
   const [activeSections, setActiveSections]     = useState<Set<Section>>(ALL_SECTIONS)
@@ -23,6 +27,51 @@ export const MapPage = () => {
   const [selectedId, setSelectedId]             = useState<string | null>(null)
   const [flyTarget, setFlyTarget]               = useState<{ lat: number; lng: number; trigger: number } | null>(null)
   const [filtersOpen, setFiltersOpen]           = useState(false)
+
+  // ── Mobile bottom-sheet drag state ──────────────────────────────────────
+  const [sheetH, setSheetH]           = useState(SHEET_HEADER_H)
+  const [sheetDragging, setSheetDragging] = useState(false)
+  const sheetHRef  = useRef(SHEET_HEADER_H)
+  const dragRef    = useRef({ startY: 0, startH: 0 })
+
+  const getSheetMaxH = () => Math.round(window.innerHeight * SHEET_MAX_FRAC)
+
+  const applySheetH = useCallback((h: number) => {
+    sheetHRef.current = h
+    setSheetH(h)
+  }, [])
+
+  // Reset to collapsed header whenever a new incident is set
+  useEffect(() => {
+    applySheetH(SHEET_HEADER_H)
+  }, [incident, applySheetH])
+
+  const handleSheetDragStart = useCallback((clientY: number) => {
+    dragRef.current = { startY: clientY, startH: sheetHRef.current }
+    setSheetDragging(true)
+  }, [])
+
+  const handleSheetDragMove = useCallback((clientY: number) => {
+    const delta = dragRef.current.startY - clientY
+    const maxH  = getSheetMaxH()
+    const newH  = Math.max(SHEET_HEADER_H, Math.min(maxH, dragRef.current.startH + delta))
+    sheetHRef.current = newH
+    setSheetH(newH)
+  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+
+  const handleSheetDragEnd = useCallback(() => {
+    setSheetDragging(false)
+    // Snap to collapsed if released near the bottom
+    if (sheetHRef.current < SHEET_HEADER_H + 50) {
+      applySheetH(SHEET_HEADER_H)
+    }
+  }, [applySheetH])
+
+  const handleSheetHeaderClick = useCallback(() => {
+    const cur = sheetHRef.current
+    applySheetH(cur <= SHEET_HEADER_H + 10 ? SHEET_DEFAULT_H : SHEET_HEADER_H)
+  }, [applySheetH])
+  // ────────────────────────────────────────────────────────────────────────
 
   const allLocations = useAllLocations(activeCategories, activeSections)
   const nearby = useNearbyLocations(incident, radiusM, activeCategories, activeSections)
@@ -110,11 +159,15 @@ export const MapPage = () => {
       </div>
 
       {/* ══════════════════════════════════════════
-          MOBILE: bottom sheet — slides up from below
+          MOBILE: bottom sheet — free-drag height
       ══════════════════════════════════════════ */}
       <div
-        className="md:hidden absolute bottom-0 inset-x-0 z-[2000] transition-transform duration-500 ease-ios"
-        style={{ transform: incident ? 'translateY(0)' : 'translateY(110%)', pointerEvents: incident ? 'auto' : 'none' }}
+        className="md:hidden absolute bottom-0 inset-x-0 z-[2000] overflow-hidden"
+        style={{
+          height: incident ? sheetH : 0,
+          transition: sheetDragging ? 'none' : 'height 400ms cubic-bezier(0.4, 0, 0.2, 1)',
+          pointerEvents: incident ? 'auto' : 'none',
+        }}
         onClick={e => e.stopPropagation()}
       >
         <NearbyList
@@ -125,6 +178,13 @@ export const MapPage = () => {
           onRadiusChange={setRadiusM}
           incidentAddress={incidentAddress}
           onClear={clearIncident}
+          fillHeight
+          mobileSheet
+          isExpanded={sheetH > SHEET_HEADER_H + 20}
+          onDragStart={handleSheetDragStart}
+          onDragMove={handleSheetDragMove}
+          onDragEnd={handleSheetDragEnd}
+          onHeaderClick={handleSheetHeaderClick}
         />
       </div>
 

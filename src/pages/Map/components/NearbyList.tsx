@@ -14,6 +14,13 @@ interface Props {
   fillHeight?: boolean
   defaultExpanded?: boolean
   listMaxHeight?: number
+  // Mobile sheet external control
+  mobileSheet?: boolean
+  isExpanded?: boolean
+  onDragStart?: (clientY: number) => void
+  onDragMove?: (clientY: number) => void
+  onDragEnd?: () => void
+  onHeaderClick?: () => void
 }
 
 const RADII = [500, 1000, 2000]
@@ -34,6 +41,12 @@ export const NearbyList = ({
   fillHeight = false,
   defaultExpanded = false,
   listMaxHeight,
+  mobileSheet = false,
+  isExpanded = false,
+  onDragStart,
+  onDragMove,
+  onDragEnd,
+  onHeaderClick,
 }: Props) => {
   const [expanded, setExpanded] = useState(defaultExpanded)
   const touchStartY = useRef(0)
@@ -43,6 +56,7 @@ export const NearbyList = ({
     setExpanded(defaultExpanded)
   }, [incidentAddress, defaultExpanded])
 
+  // ── Internal drag/toggle handlers (desktop / standalone mode) ───────────
   const handleTouchStart = (e: React.TouchEvent) => {
     touchStartY.current = e.touches[0].clientY
     didDrag.current = false
@@ -61,29 +75,44 @@ export const NearbyList = ({
     setExpanded(e => !e)
   }
 
+  // ── Mobile-sheet touch handlers ─────────────────────────────────────────
+  const msTouchStart = (e: React.TouchEvent) => {
+    onDragStart?.(e.touches[0].clientY)
+  }
+  const msTouchMove = (e: React.TouchEvent) => {
+    onDragMove?.(e.touches[0].clientY)
+  }
+  const msTouchEnd = () => {
+    onDragEnd?.()
+  }
+
+  const showExpanded = mobileSheet ? isExpanded : expanded
+
   return (
     <div
-      className="flex flex-col bg-white/95 backdrop-blur-xl rounded-t-2xl md:rounded-2xl shadow-2xl overflow-hidden"
+      className={`flex flex-col bg-white/95 backdrop-blur-xl rounded-t-2xl md:rounded-2xl shadow-2xl overflow-hidden${mobileSheet ? ' h-full' : ''}`}
       style={{ direction: 'rtl' }}
     >
       {/* Drag handle — mobile only */}
       <div
         className="md:hidden flex justify-center pt-2 pb-0.5 cursor-grab touch-none"
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
+        onTouchStart={mobileSheet ? msTouchStart : handleTouchStart}
+        onTouchMove={mobileSheet ? msTouchMove : undefined}
+        onTouchEnd={mobileSheet ? msTouchEnd : handleTouchEnd}
       >
         <div className="w-8 h-[3px] rounded-full bg-gray-200" />
       </div>
 
-      {/* Header — production size */}
+      {/* Header row */}
       <div
-        className="flex items-center justify-between px-4 py-3 cursor-pointer select-none"
-        onClick={handleHeaderClick}
-        onTouchStart={handleTouchStart}
-        onTouchEnd={handleTouchEnd}
+        className="flex items-center justify-between px-4 py-3 cursor-pointer select-none touch-none"
+        onClick={mobileSheet ? onHeaderClick : handleHeaderClick}
+        onTouchStart={mobileSheet ? msTouchStart : handleTouchStart}
+        onTouchMove={mobileSheet ? msTouchMove : undefined}
+        onTouchEnd={mobileSheet ? msTouchEnd : handleTouchEnd}
         role="button"
         tabIndex={0}
-        onKeyDown={e => e.key === 'Enter' && handleHeaderClick()}
+        onKeyDown={e => e.key === 'Enter' && (mobileSheet ? onHeaderClick?.() : handleHeaderClick())}
       >
         <div className="flex items-center gap-2.5 min-w-0">
           <div className="w-8 h-8 rounded-full bg-red-100 flex items-center justify-center shrink-0">
@@ -108,19 +137,17 @@ export const NearbyList = ({
           >
             <X className="h-3.5 w-3.5" />
           </button>
-          {expanded
+          {showExpanded
             ? <ChevronDown className="h-4 w-4 text-gray-400" />
             : <ChevronUp   className="h-4 w-4 text-gray-400" />
           }
         </div>
       </div>
 
-      {/* Animated expand/collapse */}
-      <div
-        className="grid transition-grid duration-500 ease-ios"
-        style={{ gridTemplateRows: expanded ? '1fr' : '0fr' }}
-      >
-        <div className="overflow-hidden flex flex-col min-h-0">
+      {/* Content */}
+      {mobileSheet ? (
+        // Mobile sheet: always render content, height controlled by parent
+        <div className="flex flex-col flex-1 min-h-0 overflow-hidden">
           <div className="mx-4 border-t border-gray-100" />
 
           {/* Radius selector */}
@@ -143,10 +170,7 @@ export const NearbyList = ({
           </div>
 
           {/* Location list */}
-          <div
-            className="overflow-y-auto flex-1 px-2 py-2 space-y-1"
-            style={fillHeight ? undefined : { maxHeight: `${listMaxHeight ?? 160}px` }}
-          >
+          <div className="overflow-y-auto flex-1 px-2 py-2 space-y-1">
             {locations.length === 0 ? (
               <div className="text-center py-6 text-gray-400 fade-in-delayed">
                 <MapPin className="h-6 w-6 mx-auto mb-1.5 opacity-30" />
@@ -166,7 +190,60 @@ export const NearbyList = ({
             )}
           </div>
         </div>
-      </div>
+      ) : (
+        // Desktop / standalone: animated expand/collapse
+        <div
+          className="grid transition-grid duration-500 ease-ios"
+          style={{ gridTemplateRows: expanded ? '1fr' : '0fr' }}
+        >
+          <div className="overflow-hidden flex flex-col min-h-0">
+            <div className="mx-4 border-t border-gray-100" />
+
+            {/* Radius selector */}
+            <div className="flex gap-2 px-4 pt-2.5 pb-1.5 items-center">
+              <span className="text-xs text-gray-400 font-medium shrink-0">רדיוס:</span>
+              {RADII.map(r => (
+                <button
+                  key={r}
+                  onClick={() => onRadiusChange(r)}
+                  className="shrink-0 px-3 py-1 rounded-full text-xs font-semibold transition-all active:scale-90"
+                  style={{
+                    backgroundColor: radiusM === r ? '#3B82F6' : '#F1F5F9',
+                    color: radiusM === r ? 'white' : '#64748B',
+                    boxShadow: radiusM === r ? '0 2px 8px rgba(59,130,246,0.3)' : 'none',
+                  }}
+                >
+                  {RADIUS_LABELS[r]}
+                </button>
+              ))}
+            </div>
+
+            {/* Location list */}
+            <div
+              className="overflow-y-auto flex-1 px-2 py-2 space-y-1"
+              style={fillHeight ? undefined : { maxHeight: `${listMaxHeight ?? 160}px` }}
+            >
+              {locations.length === 0 ? (
+                <div className="text-center py-6 text-gray-400 fade-in-delayed">
+                  <MapPin className="h-6 w-6 mx-auto mb-1.5 opacity-30" />
+                  <p className="text-xs">אין מקומות ברדיוס שנבחר</p>
+                </div>
+              ) : (
+                locations.map((loc, i) => (
+                  <LocationCard
+                    key={loc.id}
+                    location={loc}
+                    selected={selectedId === loc.id}
+                    onClick={() => onSelect(loc.id, loc.lat, loc.lng)}
+                    className="card-animate-in"
+                    style={{ '--card-delay': `${Math.min(i * 30, 250)}ms` } as React.CSSProperties}
+                  />
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
