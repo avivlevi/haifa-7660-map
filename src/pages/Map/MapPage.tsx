@@ -14,9 +14,12 @@ const ALL_CATEGORIES = new Set<Category>([
 
 const ALL_SECTIONS = new Set<Section>(['west_haifa', 'ramat_carmel', 'tirat_carmel'])
 
-const SHEET_HEADER_H   = 76  // collapsed: just drag handle + header row
-const SHEET_DEFAULT_H  = 290 // tap-to-expand: header + radius bar + ~160px list
-const SHEET_MAX_FRAC   = 0.78 // max sheet via drag = 78% of viewport height
+const SHEET_HEADER_H  = 76   // collapsed: drag handle + header row
+const SHEET_DEFAULT_H = 290  // tap-to-expand: comfortable list height
+const SHEET_MAX_FRAC  = 0.78 // max height via drag
+
+// iOS spring easing approximation
+const SNAP_EASING = 'cubic-bezier(0.32, 0.72, 0, 1)'
 
 export const MapPage = () => {
   const [activeCategories, setActiveCategories] = useState<Set<Category>>(ALL_CATEGORIES)
@@ -28,49 +31,78 @@ export const MapPage = () => {
   const [flyTarget, setFlyTarget]               = useState<{ lat: number; lng: number; trigger: number } | null>(null)
   const [filtersOpen, setFiltersOpen]           = useState(false)
 
-  // ── Mobile bottom-sheet drag state ──────────────────────────────────────
-  const [sheetH, setSheetH]           = useState(SHEET_HEADER_H)
-  const [sheetDragging, setSheetDragging] = useState(false)
-  const sheetHRef  = useRef(SHEET_HEADER_H)
-  const dragRef    = useRef({ startY: 0, startH: 0 })
+  // ── Mobile bottom-sheet ──────────────────────────────────────────────────
+  //
+  // The sheet is a fixed-height div anchored at bottom:0.
+  // We slide it with translateY so only `sheetMaxH - translateY` pixels are
+  // visible above the viewport edge.
+  //
+  //   translateY = sheetMaxH          → fully hidden (below viewport)
+  //   translateY = collapsedY         → header only visible
+  //   translateY = defaultExpandedY   → comfortable list visible
+  //   translateY = 0                  → fully open
+  //
+  // During a drag we write directly to the DOM (zero React re-renders).
+  // React state is only synced on snap / tap-toggle for the chevron direction.
 
-  const getSheetMaxH = () => Math.round(window.innerHeight * SHEET_MAX_FRAC)
+  const sheetRef    = useRef<HTMLDivElement>(null)
+  const sheetMaxH   = useRef(Math.round(window.innerHeight * SHEET_MAX_FRAC))
+  const currentY    = useRef(sheetMaxH.current)          // actual position (always up-to-date)
+  const dragOrigin  = useRef({ clientY: 0, translateY: 0 })
 
-  const applySheetH = useCallback((h: number) => {
-    sheetHRef.current = h
-    setSheetH(h)
+  // React state used only to re-render the chevron direction
+  const [isExpanded, setIsExpanded] = useState(false)
+
+  const collapsedY       = sheetMaxH.current - SHEET_HEADER_H
+  const defaultExpandedY = sheetMaxH.current - SHEET_DEFAULT_H
+
+  /** Write transform directly to DOM — no React re-render */
+  const setTransform = useCallback((y: number, animated: boolean) => {
+    const el = sheetRef.current
+    if (!el) return
+    el.style.transition = animated ? `transform 420ms ${SNAP_EASING}` : 'none'
+    el.style.transform  = `translateY(${y}px)`
+    currentY.current    = y
   }, [])
 
-  // Reset to collapsed header whenever a new incident is set
+  const snapTo = useCallback((y: number) => {
+    setTransform(y, true)
+    setIsExpanded(y < collapsedY - 20)
+  }, [setTransform, collapsedY])
+
+  // Slide in/out when incident appears or clears
   useEffect(() => {
-    applySheetH(SHEET_HEADER_H)
-  }, [incident, applySheetH])
+    snapTo(incident ? collapsedY : sheetMaxH.current)
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [incident])
+
+  // ── Drag handlers (called from NearbyList drag handle / header) ──────────
 
   const handleSheetDragStart = useCallback((clientY: number) => {
-    dragRef.current = { startY: clientY, startH: sheetHRef.current }
-    setSheetDragging(true)
+    dragOrigin.current = { clientY, translateY: currentY.current }
+    // Kill any in-progress CSS transition so motion follows finger instantly
+    if (sheetRef.current) sheetRef.current.style.transition = 'none'
   }, [])
 
   const handleSheetDragMove = useCallback((clientY: number) => {
-    const delta = dragRef.current.startY - clientY
-    const maxH  = getSheetMaxH()
-    const newH  = Math.max(SHEET_HEADER_H, Math.min(maxH, dragRef.current.startH + delta))
-    sheetHRef.current = newH
-    setSheetH(newH)
-  }, []) // eslint-disable-line react-hooks/exhaustive-deps
+    const delta = clientY - dragOrigin.current.clientY
+    const newY  = Math.max(0, Math.min(collapsedY, dragOrigin.current.translateY + delta))
+    // Direct DOM write — bypasses React entirely, no layout recalc (transform-only)
+    if (sheetRef.current) sheetRef.current.style.transform = `translateY(${newY}px)`
+    currentY.current = newY
+  }, [collapsedY])
 
   const handleSheetDragEnd = useCallback(() => {
-    setSheetDragging(false)
-    // Snap to collapsed if released near the bottom
-    if (sheetHRef.current < SHEET_HEADER_H + 50) {
-      applySheetH(SHEET_HEADER_H)
-    }
-  }, [applySheetH])
+    const y = currentY.current
+    // Snap closed if released within 50px of the collapsed position
+    snapTo(y > collapsedY - 50 ? collapsedY : y)
+  }, [snapTo, collapsedY])
 
   const handleSheetHeaderClick = useCallback(() => {
-    const cur = sheetHRef.current
-    applySheetH(cur <= SHEET_HEADER_H + 10 ? SHEET_DEFAULT_H : SHEET_HEADER_H)
-  }, [applySheetH])
+    const y = currentY.current
+    snapTo(y > collapsedY - 20 ? defaultExpandedY : collapsedY)
+  }, [snapTo, collapsedY, defaultExpandedY])
+
   // ────────────────────────────────────────────────────────────────────────
 
   const allLocations = useAllLocations(activeCategories, activeSections)
@@ -159,13 +191,17 @@ export const MapPage = () => {
       </div>
 
       {/* ══════════════════════════════════════════
-          MOBILE: bottom sheet — free-drag height
+          MOBILE: bottom sheet
+          Fixed height, slid with translateY so the
+          browser composites it on the GPU — no layout.
       ══════════════════════════════════════════ */}
       <div
-        className="md:hidden absolute bottom-0 inset-x-0 z-[2000] overflow-hidden"
+        ref={sheetRef}
+        className="md:hidden absolute bottom-0 inset-x-0 z-[2000]"
         style={{
-          height: incident ? sheetH : 0,
-          transition: sheetDragging ? 'none' : 'height 400ms cubic-bezier(0.4, 0, 0.2, 1)',
+          height: sheetMaxH.current,
+          transform: `translateY(${sheetMaxH.current}px)`, // starts hidden; set by effect
+          willChange: 'transform',
           pointerEvents: incident ? 'auto' : 'none',
         }}
         onClick={e => e.stopPropagation()}
@@ -180,7 +216,7 @@ export const MapPage = () => {
           onClear={clearIncident}
           fillHeight
           mobileSheet
-          isExpanded={sheetH > SHEET_HEADER_H + 20}
+          isExpanded={isExpanded}
           onDragStart={handleSheetDragStart}
           onDragMove={handleSheetDragMove}
           onDragEnd={handleSheetDragEnd}
