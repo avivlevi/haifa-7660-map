@@ -1142,4 +1142,3 @@ export const LOCATIONS: Location[] = [
     phone: '8571916',
   },
 ]
-
