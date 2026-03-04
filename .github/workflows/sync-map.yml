@@ -1,0 +1,33 @@
+name: Sync Map → miluim
+
+on:
+  push:
+    branches: [main]
+    paths: ['src/pages/Map/**']   # only fires when Map files change
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with: { path: haifa }
+
+      - uses: actions/checkout@v4
+        with:
+          repository: avivlevi/miluim
+          token: ${{ secrets.MILUIM_TOKEN }}
+          path: miluim
+
+      - name: Copy Map directory
+        run: |
+          rm -rf miluim/src/pages/Map
+          cp -r haifa/src/pages/Map miluim/src/pages/Map
+
+      - name: Commit and push
+        working-directory: miluim
+        run: |
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git config user.name "github-actions[bot]"
+          git add src/pages/Map
+          git diff --staged --quiet || git commit -m "sync: map from haifa-7660-map"
+          git push
