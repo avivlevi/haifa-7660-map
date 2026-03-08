@@ -13,6 +13,7 @@ const SECTION_SHORT: Record<Section, string> = {
   west_haifa:   'מערב חיפה',
   ramat_carmel: 'רמות כרמל',
   tirat_carmel: 'טירת הכרמל',
+  carmel:       'חבל כרמל',
 }
 
 export const SectionFilter = ({ active, onChange, wrap = false, variant = 'chips' }: Props) => {

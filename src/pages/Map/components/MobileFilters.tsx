@@ -4,7 +4,7 @@ import {
   type Category, type Section,
 } from '../data/locations'
 
-const ALL_SECTIONS: Section[] = ['west_haifa', 'ramat_carmel', 'tirat_carmel']
+const ALL_SECTIONS: Section[] = ['west_haifa', 'ramat_carmel', 'tirat_carmel', 'carmel']
 const ALL_CATEGORIES: Category[] = [
   'hospital', 'emergency', 'nursing_home',
   'shelter', 'evacuation', 'school',
@@ -15,6 +15,7 @@ const SECTION_SHORT: Record<Section, string> = {
   west_haifa:   'מערב חיפה',
   ramat_carmel: 'רמות כרמל',
   tirat_carmel: 'טירת הכרמל',
+  carmel:       'חבל כרמל',
 }
 
 const CATEGORY_SHORT: Record<Category, string> = {

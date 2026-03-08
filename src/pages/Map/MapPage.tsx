@@ -12,7 +12,7 @@ const ALL_CATEGORIES = new Set<Category>([
   'evacuation', 'school', 'community', 'food', 'gas',
 ])
 
-const ALL_SECTIONS = new Set<Section>(['west_haifa', 'ramat_carmel', 'tirat_carmel'])
+const ALL_SECTIONS = new Set<Section>(['west_haifa', 'ramat_carmel', 'tirat_carmel', 'carmel'])
 
 const SHEET_HEADER_H  = 76   // collapsed: drag handle + header row
 const SHEET_DEFAULT_H = 290  // tap-to-expand: comfortable list height
@@ -170,7 +170,7 @@ export const MapPage = () => {
           </div>
           <MobileFilterButton
             open={filtersOpen}
-            isFiltered={activeCategories.size < 9 || activeSections.size < 3}
+            isFiltered={activeCategories.size < 9 || activeSections.size < 4}
             onToggle={() => setFiltersOpen(o => !o)}
           />
         </div>
