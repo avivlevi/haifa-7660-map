@@ -10,10 +10,16 @@ interface Props {
 const ALL_SECTIONS = Object.keys(SECTION_LABELS) as Section[]
 
 const SECTION_SHORT: Record<Section, string> = {
-  west_haifa:   'מערב חיפה',
-  ramat_carmel: 'רמות כרמל',
-  tirat_carmel: 'טירת הכרמל',
-  carmel:       'חבל כרמל',
+  west_haifa:    'מערב חיפה',
+  ramat_carmel:  'רמות כרמל',
+  tirat_carmel:  'טירת הכרמל',
+  carmel:        'חבל כרמל',
+  hadar:         'הדר',
+  neve_shanan:   'נווה שאנן',
+  krayot:        'קריות',
+  daliat_carmel: 'דאלית',
+  nesher:        'נשר',
+  isfiya:        'עוספיא',
 }
 
 export const SectionFilter = ({ active, onChange, wrap = false, variant = 'chips' }: Props) => {

@@ -19,6 +19,7 @@ const CATEGORY_ICONS: Record<Category, string> = {
   community:    '👥',
   food:         '🛒',
   gas:          '⛽',
+  welfare:      '🤝',
 }
 
 const CATEGORY_SHORT: Record<Category, string> = {
@@ -31,6 +32,7 @@ const CATEGORY_SHORT: Record<Category, string> = {
   community:    'קהילה',
   food:         'מזון',
   gas:          'דלק',
+  welfare:      'רווחה',
 }
 
 export const CategoryFilter = ({ active, onChange, wrap = false, variant = 'chips' }: Props) => {

@@ -4,18 +4,28 @@ import {
   type Category, type Section,
 } from '../data/locations'
 
-const ALL_SECTIONS: Section[] = ['west_haifa', 'ramat_carmel', 'tirat_carmel', 'carmel']
+const ALL_SECTIONS: Section[] = [
+  'west_haifa', 'ramat_carmel', 'tirat_carmel', 'carmel',
+  'hadar', 'neve_shanan', 'krayot',
+  'daliat_carmel', 'nesher', 'isfiya',
+]
 const ALL_CATEGORIES: Category[] = [
   'hospital', 'emergency', 'nursing_home',
   'shelter', 'evacuation', 'school',
-  'community', 'food', 'gas',
+  'community', 'food', 'gas', 'welfare',
 ]
 
 const SECTION_SHORT: Record<Section, string> = {
-  west_haifa:   'מערב חיפה',
-  ramat_carmel: 'רמות כרמל',
-  tirat_carmel: 'טירת הכרמל',
-  carmel:       'חבל כרמל',
+  west_haifa:    'מערב חיפה',
+  ramat_carmel:  'רמות כרמל',
+  tirat_carmel:  'טירת הכרמל',
+  carmel:        'חבל כרמל',
+  hadar:         'הדר',
+  neve_shanan:   'נווה שאנן',
+  krayot:        'קריות',
+  daliat_carmel: 'דאלית',
+  nesher:        'נשר',
+  isfiya:        'עוספיא',
 }
 
 const CATEGORY_SHORT: Record<Category, string> = {
@@ -28,6 +38,7 @@ const CATEGORY_SHORT: Record<Category, string> = {
   community:    'קהילה',
   food:         'מזון',
   gas:          'דלק',
+  welfare:      'רווחה',
 }
 
 interface ButtonProps {
@@ -63,6 +74,9 @@ export const MobileFilterPanel = ({
   activeSections, onSectionsChange,
   activeCategories, onCategoriesChange,
 }: PanelProps) => {
+  const allSectionsOn   = activeSections.size   === ALL_SECTIONS.length
+  const allCategoriesOn = activeCategories.size === ALL_CATEGORIES.length
+
   const toggleSection = (sec: Section) => {
     const next = new Set(activeSections)
     next.has(sec) ? next.delete(sec) : next.add(sec)
@@ -77,25 +91,34 @@ export const MobileFilterPanel = ({
 
   return (
     <div
-      className="bg-white/95 backdrop-blur-xl rounded-xl shadow-lg border border-gray-100 px-3 py-2.5 flex flex-col gap-2"
+      className="bg-white/95 backdrop-blur-xl rounded-xl shadow-lg border border-gray-100 px-3 pt-2.5 pb-3 flex flex-col gap-2.5"
       style={{ direction: 'rtl' }}
     >
-      {/* Sections */}
-      <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-400 font-medium shrink-0">אזורים:</span>
-        <div className="flex gap-1.5">
+      {/* ── Sections ─────────────────────────────── */}
+      <div className="flex flex-col gap-1.5">
+        <div className="flex items-center justify-between">
+          <span className="text-[11px] text-gray-400 font-semibold tracking-wide">אזורים</span>
+          <button
+            onClick={() => onSectionsChange(allSectionsOn ? new Set() : new Set(ALL_SECTIONS))}
+            className="text-[11px] font-medium text-blue-500 active:opacity-60"
+          >
+            {allSectionsOn ? 'נקה הכל' : 'בחר הכל'}
+          </button>
+        </div>
+        {/* Wrap: all chips visible, no horizontal scroll */}
+        <div className="flex flex-wrap gap-1.5">
           {ALL_SECTIONS.map(sec => {
-            const on = activeSections.has(sec)
+            const on    = activeSections.has(sec)
             const color = SECTION_COLORS[sec]
             return (
               <button
                 key={sec}
                 onClick={() => toggleSection(sec)}
-                className="shrink-0 px-3 py-1 rounded-full text-xs font-medium transition-all active:scale-90"
+                className="px-2.5 py-1 rounded-full text-[11px] font-medium transition-all active:scale-90"
                 style={{
-                  backgroundColor: on ? `${color}15` : '#F8FAFC',
-                  color: on ? color : '#94A3B8',
-                  border: `1px solid ${on ? `${color}40` : '#E2E8F0'}`,
+                  backgroundColor: on ? color : '#F1F5F9',
+                  color:           on ? 'white' : '#64748B',
+                  border:          `1px solid ${on ? color : '#E2E8F0'}`,
                 }}
               >
                 {SECTION_SHORT[sec]}
@@ -107,26 +130,35 @@ export const MobileFilterPanel = ({
 
       <div className="border-t border-gray-100" />
 
-      {/* Categories — icon chips, horizontal scroll */}
-      <div className="flex items-center gap-2">
-        <span className="text-xs text-gray-400 font-medium shrink-0">קטגוריות:</span>
-        <div className="flex gap-1.5 overflow-x-auto scrollbar-none">
+      {/* ── Categories ───────────────────────────── */}
+      <div className="flex flex-col gap-1.5">
+        <div className="flex items-center justify-between">
+          <span className="text-[11px] text-gray-400 font-semibold tracking-wide">קטגוריות</span>
+          <button
+            onClick={() => onCategoriesChange(allCategoriesOn ? new Set() : new Set(ALL_CATEGORIES))}
+            className="text-[11px] font-medium text-blue-500 active:opacity-60"
+          >
+            {allCategoriesOn ? 'נקה הכל' : 'בחר הכל'}
+          </button>
+        </div>
+        {/* Horizontal scroll — icons + label */}
+        <div className="flex gap-1.5 overflow-x-auto scrollbar-none pb-0.5">
           {ALL_CATEGORIES.map(cat => {
-            const on = activeCategories.has(cat)
+            const on    = activeCategories.has(cat)
             const color = CATEGORY_COLORS[cat]
-            const Icon = CATEGORY_ICONS[cat]
+            const Icon  = CATEGORY_ICONS[cat]
             return (
               <button
                 key={cat}
                 onClick={() => toggleCategory(cat)}
-                className="shrink-0 flex items-center gap-1 px-3 py-1 rounded-full text-xs font-medium transition-all active:scale-90"
+                className="shrink-0 flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-medium transition-all active:scale-90"
                 style={{
-                  backgroundColor: on ? `${color}15` : '#F8FAFC',
-                  color: on ? color : '#94A3B8',
-                  border: `1px solid ${on ? `${color}40` : '#E2E8F0'}`,
+                  backgroundColor: on ? color : '#F1F5F9',
+                  color:           on ? 'white' : '#64748B',
+                  border:          `1px solid ${on ? color : '#E2E8F0'}`,
                 }}
               >
-                <Icon className="h-3 w-3" />
+                <Icon className="h-3 w-3 shrink-0" />
                 {CATEGORY_SHORT[cat]}
               </button>
             )

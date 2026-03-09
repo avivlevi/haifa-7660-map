@@ -9,10 +9,14 @@ import { MobileFilterButton, MobileFilterPanel } from './components/MobileFilter
 
 const ALL_CATEGORIES = new Set<Category>([
   'hospital', 'emergency', 'nursing_home', 'shelter',
-  'evacuation', 'school', 'community', 'food', 'gas',
+  'evacuation', 'school', 'community', 'food', 'gas', 'welfare',
 ])
 
-const ALL_SECTIONS = new Set<Section>(['west_haifa', 'ramat_carmel', 'tirat_carmel', 'carmel'])
+const ALL_SECTIONS = new Set<Section>([
+  'west_haifa', 'ramat_carmel', 'tirat_carmel', 'carmel',
+  'hadar', 'neve_shanan', 'krayot',
+  'daliat_carmel', 'nesher', 'isfiya',
+])
 
 const SHEET_HEADER_H  = 76   // collapsed: drag handle + header row
 const SHEET_DEFAULT_H = 290  // tap-to-expand: comfortable list height
@@ -170,7 +174,7 @@ export const MapPage = () => {
           </div>
           <MobileFilterButton
             open={filtersOpen}
-            isFiltered={activeCategories.size < 9 || activeSections.size < 4}
+            isFiltered={activeCategories.size < ALL_CATEGORIES.size || activeSections.size < ALL_SECTIONS.size}
             onToggle={() => setFiltersOpen(o => !o)}
           />
         </div>

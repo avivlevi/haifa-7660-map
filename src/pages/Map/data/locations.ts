@@ -1,4 +1,4 @@
-import { Hospital, Siren, Heart, Shield, Bus, GraduationCap, Users, ShoppingBasket, Fuel } from 'lucide-react'
+import { Hospital, Siren, Heart, Shield, Bus, GraduationCap, Users, ShoppingBasket, Fuel, HandHeart } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
 
 export type Category =
@@ -11,8 +11,19 @@ export type Category =
   | 'community'
   | 'food'
   | 'gas'
+  | 'welfare'
 
-export type Section = 'west_haifa' | 'ramat_carmel' | 'tirat_carmel' | 'carmel'
+export type Section =
+  | 'west_haifa'
+  | 'ramat_carmel'
+  | 'tirat_carmel'
+  | 'carmel'
+  | 'hadar'
+  | 'neve_shanan'
+  | 'krayot'
+  | 'daliat_carmel'
+  | 'nesher'
+  | 'isfiya'
 
 export interface Location {
   id: string
@@ -37,6 +48,7 @@ export const CATEGORY_LABELS: Record<Category, string> = {
   community:   'שירותי קהילה',
   food:        'רשתות מזון',
   gas:         'תחנות דלק',
+  welfare:     'מוסדות רווחה',
 }
 
 export const CATEGORY_COLORS: Record<Category, string> = {
@@ -49,6 +61,7 @@ export const CATEGORY_COLORS: Record<Category, string> = {
   community:   '#14B8A6', // teal
   food:        '#22C55E', // green
   gas:         '#6B7280', // gray
+  welfare:     '#A855F7', // violet
 }
 
 export const CATEGORY_ICONS: Record<Category, LucideIcon> = {
@@ -61,20 +74,33 @@ export const CATEGORY_ICONS: Record<Category, LucideIcon> = {
   community:    Users,
   food:         ShoppingBasket,
   gas:          Fuel,
+  welfare:      HandHeart,
 }
 
 export const SECTION_LABELS: Record<Section, string> = {
-  west_haifa:   'מערב חיפה',
-  ramat_carmel: 'רמות כרמל',
-  tirat_carmel: 'טירת הכרמל',
-  carmel:       'חבל כרמל',
+  west_haifa:    'מערב חיפה',
+  ramat_carmel:  'רמות כרמל',
+  tirat_carmel:  'טירת הכרמל',
+  carmel:        'חבל כרמל',
+  hadar:         'הדר ועיר תחתית',
+  neve_shanan:   'נווה שאנן',
+  krayot:        'קריות ומפרץ',
+  daliat_carmel: 'דאלית אל כרמל',
+  nesher:        'נשר',
+  isfiya:        'עוספיא',
 }
 
 export const SECTION_COLORS: Record<Section, string> = {
-  west_haifa:   '#0EA5E9', // sky blue
-  ramat_carmel: '#10B981', // emerald
-  tirat_carmel: '#F59E0B', // amber
-  carmel:       '#6366F1', // indigo
+  west_haifa:    '#0EA5E9', // sky blue
+  ramat_carmel:  '#10B981', // emerald
+  tirat_carmel:  '#F59E0B', // amber
+  carmel:        '#6366F1', // indigo
+  hadar:         '#EF4444', // red
+  neve_shanan:   '#F97316', // orange
+  krayot:        '#06B6D4', // cyan
+  daliat_carmel: '#84CC16', // lime
+  nesher:        '#8B5CF6', // violet
+  isfiya:        '#EC4899', // pink
 }
 
 export const LOCATIONS: Location[] = [
@@ -2041,5 +2067,1263 @@ export const LOCATIONS: Location[] = [
     address: 'שדרות הנשיא 132, חיפה',
     lat: 32.7833,
     lng: 35.0074,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // SECTION: הדר ועיר תחתית (Hadar & Lower City)
+  // Population: ~52,300 | Mixed Jewish/Arab | Low–Medium SES
+  // ════════════════════════════════════════════════════════
+
+  // ─── Hospitals ──────────────────────────────────────────
+  {
+    id: 'hadar_hospital_bnei_zion',
+    name: 'בית חולים בני ציון',
+    category: 'hospital',
+    section: 'hadar',
+    address: 'אליהו גולומב 47, חיפה',
+    lat: 32.8225,
+    lng: 35.0052,
+    phone: '04-8359359',
+  },
+
+  // ─── Nursing Homes ──────────────────────────────────────
+  {
+    id: 'hadar_nursing_noam',
+    name: 'בית הורים נועם — אחוזת לב',
+    category: 'nursing_home',
+    section: 'hadar',
+    address: 'בלפור 11, חיפה',
+    lat: 32.8220,
+    lng: 35.0048,
+    phone: '04-7792106',
+    capacity: 90,
+  },
+  {
+    id: 'hadar_nursing_windsor',
+    name: 'בית אבות וינדזור',
+    category: 'nursing_home',
+    section: 'hadar',
+    address: 'שדרות בן גוריון 14, חיפה',
+    lat: 32.8215,
+    lng: 35.0038,
+    phone: '052-3770035',
+    capacity: 43,
+  },
+  {
+    id: 'hadar_nursing_even_ezer',
+    name: 'בית אבות אבן עזר',
+    category: 'nursing_home',
+    section: 'hadar',
+    address: 'מאיר רוטברג 41, חיפה',
+    lat: 32.8230,
+    lng: 35.0025,
+    phone: '04-8529730',
+    capacity: 48,
+  },
+  {
+    id: 'hadar_nursing_daniel',
+    name: 'בית אבות בית דניאל',
+    category: 'nursing_home',
+    section: 'hadar',
+    address: 'שומאכר גוטליב 3, חיפה',
+    lat: 32.8228,
+    lng: 35.0030,
+    phone: '04-8537271',
+    capacity: 30,
+  },
+  {
+    id: 'hadar_nursing_moriya',
+    name: 'בית אבות קבוצת מוריה',
+    category: 'nursing_home',
+    section: 'hadar',
+    address: 'פבזנר 39, חיפה',
+    lat: 32.8240,
+    lng: 35.0060,
+    phone: '052-8983991',
+    capacity: 83,
+  },
+  {
+    id: 'hadar_nursing_margoa_nof',
+    name: 'נוף הגפן',
+    category: 'nursing_home',
+    section: 'hadar',
+    address: 'הגפן 4, חיפה',
+    lat: 32.8218,
+    lng: 35.0055,
+    phone: '04-7792106',
+    capacity: 30,
+  },
+
+  // ─── Community Centers ───────────────────────────────────
+  {
+    id: 'hadar_community_beitanu',
+    name: 'מתנ"ס ביתנו',
+    category: 'community',
+    section: 'hadar',
+    address: 'ירושלים 29, חיפה',
+    lat: 32.8210,
+    lng: 35.0070,
+    phone: '04-8353015',
+  },
+  {
+    id: 'hadar_community_pyramid',
+    name: 'מתנ"ס הפירמידה',
+    category: 'community',
+    section: 'hadar',
+    address: 'אבן גבירול 6, חיפה',
+    lat: 32.8220,
+    lng: 35.0065,
+  },
+  {
+    id: 'hadar_community_abbas',
+    name: 'מתנ"ס עבאס',
+    category: 'community',
+    section: 'hadar',
+    address: 'עבאס 60, חיפה',
+    lat: 32.8180,
+    lng: 35.0010,
+  },
+
+  // ─── Welfare ─────────────────────────────────────────────
+  {
+    id: 'hadar_welfare_marsal',
+    name: 'מרש"ל חיפה — תעסוקה לעיוורים',
+    category: 'welfare',
+    section: 'hadar',
+    address: 'הגפן 32, חיפה',
+    lat: 32.8218,
+    lng: 35.0058,
+    phone: '04-8527222',
+    capacity: 250,
+  },
+  {
+    id: 'hadar_welfare_maon_hod',
+    name: 'מעון הוד',
+    category: 'welfare',
+    section: 'hadar',
+    address: 'מאיר רוטברג 43, חיפה',
+    lat: 32.8231,
+    lng: 35.0026,
+    phone: '050-6926655',
+    capacity: 122,
+  },
+  {
+    id: 'hadar_welfare_ktb_benyehuda',
+    name: 'ק.ט.ב — הוסטל בן יהודה',
+    category: 'welfare',
+    section: 'hadar',
+    address: 'בן יהודה 16, חיפה',
+    lat: 32.8224,
+    lng: 35.0043,
+    phone: '054-5614871',
+    capacity: 30,
+  },
+  {
+    id: 'hadar_welfare_kidum',
+    name: 'קידום — נוף הדרים',
+    category: 'welfare',
+    section: 'hadar',
+    address: 'בר גיורא 3, חיפה',
+    lat: 32.8235,
+    lng: 35.0035,
+    phone: '04-8373046',
+    capacity: 30,
+  },
+  {
+    id: 'hadar_welfare_atid_hadash',
+    name: 'עתיד חדש — דיור מוגן',
+    category: 'welfare',
+    section: 'hadar',
+    address: 'נורדאו 32, חיפה',
+    lat: 32.8217,
+    lng: 35.0040,
+    phone: '052-6825526',
+  },
+  {
+    id: 'hadar_welfare_alvein',
+    name: 'אלוין ישראל — מרכז יום לקשיש',
+    category: 'welfare',
+    section: 'hadar',
+    address: 'י.ל. פרץ 32, חיפה',
+    lat: 32.8205,
+    lng: 35.0050,
+    phone: '052-6024553',
+    capacity: 35,
+  },
+
+  // ─── Schools ────────────────────────────────────────────
+  {
+    id: 'hadar_school_reali_yesodi',
+    name: 'הריאלי יסודי הדר',
+    category: 'school',
+    section: 'hadar',
+    address: 'קסל 5, חיפה',
+    lat: 32.8262,
+    lng: 35.0040,
+    phone: '04-8141700',
+  },
+  {
+    id: 'hadar_school_reali_tikhon',
+    name: 'הריאלי תיכון הדר',
+    category: 'school',
+    section: 'hadar',
+    address: 'שמריהו לוין 18, חיפה',
+    lat: 32.8255,
+    lng: 35.0058,
+    phone: '04-8146600',
+  },
+  {
+    id: 'hadar_school_italiano',
+    name: 'תיכון איטלקי',
+    category: 'school',
+    section: 'hadar',
+    address: 'האיטלקים 8, חיפה',
+    lat: 32.8190,
+    lng: 35.0045,
+    phone: '04-8533740',
+  },
+  {
+    id: 'hadar_school_leobeck_hadar',
+    name: 'ליאו באק תיכון — הדר',
+    category: 'school',
+    section: 'hadar',
+    address: 'טשרניחובסקי 71, חיפה',
+    lat: 32.8245,
+    lng: 35.0012,
+    phone: '04-8337159',
+  },
+  {
+    id: 'hadar_school_beit_yaakov_tikhon',
+    name: 'בית-יעקב תיכון',
+    category: 'school',
+    section: 'hadar',
+    address: 'בצלאל 5, חיפה',
+    lat: 32.8248,
+    lng: 34.9998,
+    phone: '04-8252169',
+  },
+  {
+    id: 'hadar_school_hiwar',
+    name: 'חיואר',
+    category: 'school',
+    section: 'hadar',
+    address: 'שמריהו לוין 30, חיפה',
+    lat: 32.8252,
+    lng: 35.0060,
+    phone: '04-8532700',
+  },
+  {
+    id: 'hadar_school_alkharma',
+    name: 'אלכרמה — יסודי',
+    category: 'school',
+    section: 'hadar',
+    address: 'אלמותנבי 10, חיפה',
+    lat: 32.8170,
+    lng: 35.0020,
+  },
+  {
+    id: 'hadar_school_ahawa',
+    name: 'אחווה',
+    category: 'school',
+    section: 'hadar',
+    address: 'קיסריה 23, חיפה',
+    lat: 32.8175,
+    lng: 35.0030,
+  },
+  {
+    id: 'hadar_school_ort_carmel',
+    name: 'אורט כרמל',
+    category: 'school',
+    section: 'hadar',
+    address: 'רחוב 93 מס\' 8, חיפה',
+    lat: 32.8210,
+    lng: 35.0025,
+    phone: '04-8640153',
+  },
+  {
+    id: 'hadar_school_lemehonenim',
+    name: 'בית ספר למחוננים',
+    category: 'school',
+    section: 'hadar',
+    address: 'מסדה 10, חיפה',
+    lat: 32.8200,
+    lng: 35.0008,
+  },
+  {
+    id: 'hadar_school_lev_kadosh_lower',
+    name: 'הלב הקדוש — יסודי',
+    category: 'school',
+    section: 'hadar',
+    address: 'אלנבי 13, חיפה',
+    lat: 32.8160,
+    lng: 35.0000,
+    phone: '04-8673890',
+  },
+  {
+    id: 'hadar_school_massoret_israel',
+    name: 'מסורת ישראל',
+    category: 'school',
+    section: 'hadar',
+    address: 'רמב"ן 9, חיפה',
+    lat: 32.8233,
+    lng: 35.0045,
+  },
+
+  // ─── Emergency ──────────────────────────────────────────
+  {
+    id: 'hadar_emergency_police_haifa',
+    name: 'משטרה — תחנת חיפה',
+    category: 'emergency',
+    section: 'hadar',
+    address: 'נתן אלבז 1, חיפה',
+    lat: 32.8046,
+    lng: 35.0105,
+    phone: '04-8648444',
+  },
+  {
+    id: 'hadar_emergency_mda',
+    name: 'מד"א — תחנת כרמל',
+    category: 'emergency',
+    section: 'hadar',
+    address: 'יצחק שדה 10, חיפה',
+    lat: 32.8220,
+    lng: 34.9872,
+    phone: '04-8512233',
+  },
+
+  // ─── Food ────────────────────────────────────────────────
+  {
+    id: 'hadar_food_herzl',
+    name: 'הרצל חיפה — סופר ברזל',
+    category: 'food',
+    section: 'hadar',
+    address: 'הרצל 95, חיפה',
+    lat: 32.8225,
+    lng: 35.0010,
+  },
+  {
+    id: 'hadar_food_keshet',
+    name: 'קשת טעמים',
+    category: 'food',
+    section: 'hadar',
+    address: 'שבתאי לוי 23, חיפה',
+    lat: 32.8200,
+    lng: 35.0035,
+    phone: '04-8640153',
+  },
+  {
+    id: 'hadar_food_osher_ad',
+    name: 'אושר עד',
+    category: 'food',
+    section: 'hadar',
+    address: 'בר יהודה ישראל 15, חיפה',
+    lat: 32.8208,
+    lng: 35.0042,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // SECTION: נווה שאנן (Neve Shanan)
+  // Population: ~59,500 | 21.4% of Haifa | 55% new immigrants
+  // Neighborhoods: נווה שאנן, נווה יוסף, נווה גנים, תל עמל, רמת ספיר, רמת אלון, רמת חן, גבעת זמר
+  // ════════════════════════════════════════════════════════
+
+  // ─── Nursing Homes ──────────────────────────────────────
+  {
+    id: 'ns_nursing_sfaradi',
+    name: 'בית אבות ספרדי',
+    category: 'nursing_home',
+    section: 'neve_shanan',
+    address: 'גדליהו 1, חיפה',
+    lat: 32.8020,
+    lng: 35.0185,
+    phone: '052-6414450',
+    capacity: 306,
+    notes: 'תפוסה נוכחית 306 מתוך 400',
+  },
+  {
+    id: 'ns_nursing_dina',
+    name: 'בית דינה',
+    category: 'nursing_home',
+    section: 'neve_shanan',
+    address: 'אד"ם הכהן 3, חיפה',
+    lat: 32.8010,
+    lng: 35.0165,
+    phone: '052-8381776',
+    capacity: 36,
+    notes: 'תפוסה נוכחית 36 מתוך 85',
+  },
+  {
+    id: 'ns_nursing_lev_haifa',
+    name: 'בית אבות לב חיפה',
+    category: 'nursing_home',
+    section: 'neve_shanan',
+    address: 'החשמל 2, חיפה',
+    lat: 32.8042,
+    lng: 35.0220,
+    phone: '052-6937771',
+    capacity: 54,
+  },
+  {
+    id: 'ns_nursing_dor_carmel',
+    name: 'בית אבות דור כרמל',
+    category: 'nursing_home',
+    section: 'neve_shanan',
+    address: 'גדליהו 1, חיפה',
+    lat: 32.8018,
+    lng: 35.0183,
+    phone: '054-2272272',
+    capacity: 132,
+  },
+  {
+    id: 'ns_nursing_maon_harofe',
+    name: 'בית אבות מעון הרופא',
+    category: 'nursing_home',
+    section: 'neve_shanan',
+    address: 'דורי יעקב 9, חיפה',
+    lat: 32.8080,
+    lng: 35.0158,
+    phone: '054-5618375',
+    capacity: 93,
+  },
+  {
+    id: 'ns_nursing_psgat_hen',
+    name: 'בית אבות פסגת חן',
+    category: 'nursing_home',
+    section: 'neve_shanan',
+    address: 'בת חן 40, חיפה',
+    lat: 32.8060,
+    lng: 35.0200,
+    phone: '052-5992003',
+    capacity: 130,
+  },
+  {
+    id: 'ns_nursing_beit_gavriel',
+    name: 'בית גבריאל נווה גנים',
+    category: 'nursing_home',
+    section: 'neve_shanan',
+    address: 'נווה גנים 9, חיפה',
+    lat: 32.7950,
+    lng: 35.0200,
+    phone: '054-5231157',
+    capacity: 138,
+  },
+
+  // ─── Hospital / Geriatric ────────────────────────────────
+  {
+    id: 'ns_hospital_peliman',
+    name: 'מרכז גריאטרי פלימן',
+    category: 'hospital',
+    section: 'neve_shanan',
+    address: 'זלמן שניאור, חיפה',
+    lat: 32.8050,
+    lng: 35.0150,
+    phone: '04-8307000',
+  },
+
+  // ─── Community Centers ───────────────────────────────────
+  {
+    id: 'ns_community_neve_yosef',
+    name: 'מתנ"ס נווה יוסף',
+    category: 'community',
+    section: 'neve_shanan',
+    address: 'הרב משאש 1א, חיפה',
+    lat: 32.8010,
+    lng: 35.0115,
+  },
+  {
+    id: 'ns_community_aba_hushi',
+    name: 'בית אבא חושי',
+    category: 'community',
+    section: 'neve_shanan',
+    address: 'אבא הילל סילבר 21, חיפה',
+    lat: 32.8082,
+    lng: 35.0248,
+  },
+  {
+    id: 'ns_community_halisa',
+    name: 'מתנ"ס חליסה',
+    category: 'community',
+    section: 'neve_shanan',
+    address: 'הירדן 23, חיפה',
+    lat: 32.8165,
+    lng: 35.0198,
+  },
+  {
+    id: 'ns_community_ramot_sapir',
+    name: 'מתנ"ס רמות ספיר',
+    category: 'community',
+    section: 'neve_shanan',
+    address: 'גוטל לוין 22, חיפה',
+    lat: 32.7978,
+    lng: 35.0250,
+  },
+
+  // ─── Emergency ──────────────────────────────────────────
+  {
+    id: 'ns_emergency_police_zevulun',
+    name: 'משטרה — תחנת זבולון',
+    category: 'emergency',
+    section: 'neve_shanan',
+    address: 'שדרות ההסתדרות 271, חיפה',
+    lat: 32.8050,
+    lng: 35.0552,
+    phone: '04-8464444',
+  },
+  {
+    id: 'ns_emergency_mda',
+    name: 'מד"א — תחנת כרמל',
+    category: 'emergency',
+    section: 'neve_shanan',
+    address: 'יצחק שדה 10, חיפה',
+    lat: 32.8220,
+    lng: 34.9872,
+    phone: '04-8512233',
+  },
+  {
+    id: 'ns_emergency_fire',
+    name: 'כב"ה — מחוז חוף',
+    category: 'emergency',
+    section: 'neve_shanan',
+    address: 'חלץ 9, חיפה',
+    lat: 32.7994,
+    lng: 35.0208,
+    phone: '04-8601201',
+  },
+
+  // ─── Shelters ────────────────────────────────────────────
+  {
+    id: 'ns_shelter_pinsker',
+    name: 'מקלט — בי"ס עירוני ג\'',
+    category: 'shelter',
+    section: 'neve_shanan',
+    address: 'פינסקר 13, חיפה',
+    lat: 32.8038,
+    lng: 35.0170,
+    phone: '04-8522861',
+  },
+
+  // ════════════════════════════════════════════════════════
+  // SECTION: קריות ומפרץ (Krayot & Haifa Bay)
+  // Population: ~36,700 | 100% Jewish | 16% new immigrants
+  // Area: Kiryat Hayim, Kiryat Shmuel — industrial bay zone
+  // ════════════════════════════════════════════════════════
+
+  // ─── Hospitals / Clinics ────────────────────────────────
+  {
+    id: 'krayot_clinic_marbak',
+    name: 'מרפאת מרבך קרית חיים',
+    category: 'hospital',
+    section: 'krayot',
+    address: 'יצחק יציב 26, קרית חיים',
+    lat: 32.8435,
+    lng: 35.0740,
+    phone: '04-8706900',
+  },
+  {
+    id: 'krayot_clinic_tzalon',
+    name: 'מרפאת צאלון',
+    category: 'hospital',
+    section: 'krayot',
+    address: 'אברבנאל 35, קרית שמואל',
+    lat: 32.8355,
+    lng: 35.0690,
+    phone: '04-8706800',
+  },
+  {
+    id: 'krayot_clinic_kiryat_shmuel',
+    name: 'מרפאת קרית שמואל',
+    category: 'hospital',
+    section: 'krayot',
+    address: 'דב פרומר 14, קרית שמואל',
+    lat: 32.8320,
+    lng: 35.0670,
+    phone: '04-8706820',
+  },
+
+  // ─── Emergency ──────────────────────────────────────────
+  {
+    id: 'krayot_emergency_police',
+    name: 'משטרה — תחנת זבולון',
+    category: 'emergency',
+    section: 'krayot',
+    address: 'שדרות ההסתדרות 271, חיפה',
+    lat: 32.8050,
+    lng: 35.0552,
+    phone: '04-8464444',
+  },
+  {
+    id: 'krayot_emergency_fire_kiryat_bialik',
+    name: 'כב"ה — קרית ביאליק',
+    category: 'emergency',
+    section: 'krayot',
+    address: 'שדרות חן 9, קרית ביאליק',
+    lat: 32.8400,
+    lng: 35.0750,
+    phone: '04-6650923',
+  },
+  {
+    id: 'krayot_emergency_fire_kiryat_ata',
+    name: 'כב"ה — קרית אתא',
+    category: 'emergency',
+    section: 'krayot',
+    address: 'החרש 1, קרית אתא',
+    lat: 32.8510,
+    lng: 35.1070,
+    phone: '04-8601299',
+  },
+  {
+    id: 'krayot_emergency_mda',
+    name: 'מד"א — קרית מוצקין',
+    category: 'emergency',
+    section: 'krayot',
+    address: 'החשמונאים 75, קרית מוצקין',
+    lat: 32.8340,
+    lng: 35.0780,
+    phone: '101',
+  },
+
+  // ─── Schools ────────────────────────────────────────────
+  {
+    id: 'krayot_school_aharon_haraah_b',
+    name: 'אהרון הרא"ה — בנות',
+    category: 'school',
+    section: 'krayot',
+    address: 'שדרות הרא"ה 10, קרית חיים',
+    lat: 32.8350,
+    lng: 35.0720,
+    phone: '04-8706944',
+  },
+  {
+    id: 'krayot_school_aharon_haraah_a',
+    name: 'אהרון הרא"ה — בנים',
+    category: 'school',
+    section: 'krayot',
+    address: 'דב פרומר 15, קרית שמואל',
+    lat: 32.8315,
+    lng: 35.0675,
+    phone: '04-8715570',
+  },
+  {
+    id: 'krayot_school_dagania',
+    name: 'דגניה',
+    category: 'school',
+    section: 'krayot',
+    address: 'שדרות דגניה 33, קרית חיים',
+    lat: 32.8355,
+    lng: 35.0685,
+    phone: '04-8414765',
+  },
+  {
+    id: 'krayot_school_arlosoroff',
+    name: 'ארלוזורוב',
+    category: 'school',
+    section: 'krayot',
+    address: 'הפלוגות 65, קרית חיים',
+    lat: 32.8360,
+    lng: 35.0712,
+    phone: '04-8721239',
+  },
+  {
+    id: 'krayot_school_maginim',
+    name: 'מגינים',
+    category: 'school',
+    section: 'krayot',
+    address: 'יצחק בן צבי 12, קרית שמואל',
+    lat: 32.8318,
+    lng: 35.0690,
+    phone: '04-8721567',
+  },
+  {
+    id: 'krayot_school_gordon',
+    name: 'גורדון',
+    category: 'school',
+    section: 'krayot',
+    address: 'זלמן ארן 60, קרית חיים',
+    lat: 32.8370,
+    lng: 35.0730,
+    phone: '04-8731814',
+  },
+  {
+    id: 'krayot_school_hatavta_dagan',
+    name: 'חט"ב דגן',
+    category: 'school',
+    section: 'krayot',
+    address: 'בן צבי 6, קרית שמואל',
+    lat: 32.8390,
+    lng: 35.0720,
+    phone: '04-8725750',
+  },
+  {
+    id: 'krayot_school_tikhon_hayim',
+    name: 'קרית חיים — תיכון עירוני מקיף',
+    category: 'school',
+    section: 'krayot',
+    address: 'הגדוד העברי 56, קרית חיים',
+    lat: 32.8430,
+    lng: 35.0758,
+    phone: '04-8463906',
+  },
+  {
+    id: 'krayot_school_tikhon_ironi_b',
+    name: "תיכון עירוני ב'",
+    category: 'school',
+    section: 'krayot',
+    address: 'יוסף שטרן 9, קרית חיים',
+    lat: 32.8420,
+    lng: 35.0742,
+    phone: '04-8758195',
+  },
+  {
+    id: 'krayot_school_regavim',
+    name: 'רגבים',
+    category: 'school',
+    section: 'krayot',
+    address: 'שדרות דגניה 55, קרית חיים',
+    lat: 32.8345,
+    lng: 35.0695,
+    phone: '04-8725194',
+  },
+  {
+    id: 'krayot_school_emol',
+    name: 'מכללת עמל',
+    category: 'school',
+    section: 'krayot',
+    address: 'יצחק בן צבי 10, קרית שמואל',
+    lat: 32.8321,
+    lng: 35.0688,
+    phone: '04-8721003',
+  },
+  {
+    id: 'krayot_school_netivot_moshe',
+    name: 'נתיבות משה',
+    category: 'school',
+    section: 'krayot',
+    address: 'קדושי השואה 13, קרית חיים',
+    lat: 32.8410,
+    lng: 35.0745,
+    phone: '04-8760337',
+  },
+  {
+    id: 'krayot_school_haifa_tikhon',
+    name: 'מכללת תיכון חיפה',
+    category: 'school',
+    section: 'krayot',
+    address: 'ההסתדרות 68, קרית חיים',
+    lat: 32.8388,
+    lng: 35.0768,
+    phone: '04-8412133',
+  },
+  {
+    id: 'krayot_school_technology',
+    name: 'מכללה טכנולוגית',
+    category: 'school',
+    section: 'krayot',
+    address: 'מפרץ חיפה, קרית חיים',
+    lat: 32.8380,
+    lng: 35.0700,
+    phone: '04-8697961',
+  },
+
+  // ─── Welfare / Community Hostels ────────────────────────
+  {
+    id: 'krayot_welfare_ornit',
+    name: 'בית הורים אורנית',
+    category: 'welfare',
+    section: 'krayot',
+    address: 'אח"י אילת 384, קרית חיים',
+    lat: 32.8405,
+    lng: 35.0758,
+    phone: '054-2329420',
+    capacity: 11,
+  },
+  {
+    id: 'krayot_welfare_penina',
+    name: 'בית פנינה',
+    category: 'welfare',
+    section: 'krayot',
+    address: 'התקומה 6, קרית חיים',
+    lat: 32.8395,
+    lng: 35.0740,
+    phone: '050-5336649',
+    capacity: 30,
+  },
+  {
+    id: 'krayot_welfare_gavriel',
+    name: 'בית גבריאל',
+    category: 'welfare',
+    section: 'krayot',
+    address: 'דב פרומר 19, קרית שמואל',
+    lat: 32.8318,
+    lng: 35.0680,
+    phone: '054-8042909',
+    capacity: 67,
+  },
+  {
+    id: 'krayot_welfare_yaarah',
+    name: 'הוסטל יערה — א.ד.נ.מ.',
+    category: 'welfare',
+    section: 'krayot',
+    address: 'קרית חיים',
+    lat: 32.8435,
+    lng: 35.0755,
+    phone: '050-8433366',
+    capacity: 16,
+  },
+  {
+    id: 'krayot_welfare_kasler',
+    name: 'אילן בית קסלר',
+    category: 'welfare',
+    section: 'krayot',
+    address: 'קרית חיים',
+    lat: 32.8425,
+    lng: 35.0750,
+    phone: '052-8750264',
+    capacity: 82,
+  },
+
+  // ─── Evacuation / Community ──────────────────────────────
+  {
+    id: 'krayot_evac_nagler',
+    name: 'בית נגלר',
+    category: 'evacuation',
+    section: 'krayot',
+    address: 'בן צבי 14, קרית שמואל',
+    lat: 32.8322,
+    lng: 35.0692,
+  },
+  {
+    id: 'krayot_evac_shmuel_a',
+    name: 'מרכז קהילתי שמואל א\'',
+    category: 'evacuation',
+    section: 'krayot',
+    address: 'התנאים 21, קרית שמואל',
+    lat: 32.8310,
+    lng: 35.0672,
+  },
+  {
+    id: 'krayot_evac_heine',
+    name: 'בית היינה',
+    category: 'evacuation',
+    section: 'krayot',
+    address: 'הקונגרס 43, קרית חיים',
+    lat: 32.8365,
+    lng: 35.0730,
+  },
+
+  // ════════════════════════════════════════════════════════
+  // SECTION: דאלית אל כרמל (Daliat al-Carmel)
+  // Population: 20,373 | Druze | Socioeconomic Cluster 4
+  // ════════════════════════════════════════════════════════
+
+  // ─── Emergency ──────────────────────────────────────────
+  {
+    id: 'daliat_emergency_mda',
+    name: 'מד"א — דאלית אל כרמל',
+    category: 'emergency',
+    section: 'daliat_carmel',
+    address: 'דאלית אל כרמל',
+    lat: 32.6982,
+    lng: 35.0590,
+    phone: '0529206967',
+  },
+  {
+    id: 'daliat_emergency_fire',
+    name: 'כב"ה — דאלית אל כרמל',
+    category: 'emergency',
+    section: 'daliat_carmel',
+    address: 'דאלית אל כרמל',
+    lat: 32.6978,
+    lng: 35.0585,
+    phone: '0526599616',
+  },
+  {
+    id: 'daliat_emergency_police',
+    name: 'משטרה — דאלית אל כרמל',
+    category: 'emergency',
+    section: 'daliat_carmel',
+    address: 'דאלית אל כרמל',
+    lat: 32.6985,
+    lng: 35.0595,
+    phone: '0538788898',
+  },
+
+  // ─── Schools ────────────────────────────────────────────
+  {
+    id: 'daliat_school_yidudi_a',
+    name: 'בי"ס יסודי א\'',
+    category: 'school',
+    section: 'daliat_carmel',
+    address: 'דאלית אל כרמל',
+    lat: 32.6992,
+    lng: 35.0572,
+    phone: '04-8390100',
+  },
+  {
+    id: 'daliat_school_yidudi_b',
+    name: 'בי"ס יסודי ב\'',
+    category: 'school',
+    section: 'daliat_carmel',
+    address: 'דאלית אל כרמל',
+    lat: 32.6988,
+    lng: 35.0580,
+    phone: '04-8390101',
+  },
+  {
+    id: 'daliat_school_high',
+    name: 'תיכון דאלית אל כרמל',
+    category: 'school',
+    section: 'daliat_carmel',
+    address: 'דאלית אל כרמל',
+    lat: 32.6975,
+    lng: 35.0600,
+    phone: '04-8390200',
+  },
+
+  // ─── Community Centers / Shelters ───────────────────────
+  {
+    id: 'daliat_community_center_a',
+    name: 'מרכז קהילתי א\'',
+    category: 'community',
+    section: 'daliat_carmel',
+    address: 'דאלית אל כרמל',
+    lat: 32.6980,
+    lng: 35.0590,
+    capacity: 440,
+  },
+  {
+    id: 'daliat_community_center_b',
+    name: 'מרכז קהילתי ב\'',
+    category: 'community',
+    section: 'daliat_carmel',
+    address: 'דאלית אל כרמל',
+    lat: 32.6995,
+    lng: 35.0565,
+    capacity: 700,
+  },
+  {
+    id: 'daliat_shelter_school_a',
+    name: 'מקלט — בית ספר יסודי א\'',
+    category: 'shelter',
+    section: 'daliat_carmel',
+    address: 'דאלית אל כרמל',
+    lat: 32.6990,
+    lng: 35.0571,
+    capacity: 42,
+  },
+  {
+    id: 'daliat_shelter_school_b',
+    name: 'מקלט — בית ספר חאטב',
+    category: 'shelter',
+    section: 'daliat_carmel',
+    address: 'דאלית אל כרמל',
+    lat: 32.6985,
+    lng: 35.0578,
+    capacity: 105,
+  },
+  {
+    id: 'daliat_shelter_yidudi_gimmel',
+    name: 'מקלט — בי"ס יסודי ג\'',
+    category: 'shelter',
+    section: 'daliat_carmel',
+    address: 'דאלית אל כרמל',
+    lat: 32.6970,
+    lng: 35.0598,
+    capacity: 100,
+  },
+  {
+    id: 'daliat_shelter_tzekin',
+    name: 'מקלט — צקין דרקא',
+    category: 'shelter',
+    section: 'daliat_carmel',
+    address: 'דאלית אל כרמל',
+    lat: 32.7005,
+    lng: 35.0562,
+    capacity: 280,
+    notes: '4 יחידות של 70 מ"ר כל אחת',
+  },
+  {
+    id: 'daliat_welfare_blood_center',
+    name: 'מרכז תרומת דם',
+    category: 'welfare',
+    section: 'daliat_carmel',
+    address: 'דאלית אל כרמל',
+    lat: 32.6981,
+    lng: 35.0591,
+    notes: 'קואורדינטות: 35.057101, 32.698513',
+  },
+
+  // ════════════════════════════════════════════════════════
+  // SECTION: נשר (Nesher)
+  // Independent city adjacent to Haifa, SE slope of Carmel
+  // ════════════════════════════════════════════════════════
+
+  // ─── Emergency ──────────────────────────────────────────
+  {
+    id: 'nesher_emergency_police',
+    name: 'משטרה — נשר',
+    category: 'emergency',
+    section: 'nesher',
+    address: 'נשר',
+    lat: 32.7750,
+    lng: 35.0380,
+    phone: '100',
+  },
+  {
+    id: 'nesher_emergency_mda',
+    name: 'מד"א — נשר',
+    category: 'emergency',
+    section: 'nesher',
+    address: 'נשר',
+    lat: 32.7748,
+    lng: 35.0375,
+    phone: '101',
+    notes: 'מפקד: דן דר 054-5212123',
+  },
+  {
+    id: 'nesher_emergency_fire',
+    name: 'כב"ה — נשר',
+    category: 'emergency',
+    section: 'nesher',
+    address: 'נשר',
+    lat: 32.7752,
+    lng: 35.0385,
+    phone: '102',
+  },
+
+  // ─── Schools ────────────────────────────────────────────
+  {
+    id: 'nesher_school_1',
+    name: 'בי"ס יסודי א\' נשר',
+    category: 'school',
+    section: 'nesher',
+    address: 'נשר',
+    lat: 32.7762,
+    lng: 35.0370,
+    phone: '04-8302600',
+  },
+  {
+    id: 'nesher_school_tikhon',
+    name: 'תיכון נשר',
+    category: 'school',
+    section: 'nesher',
+    address: 'נשר',
+    lat: 32.7770,
+    lng: 35.0390,
+    phone: '04-8302700',
+  },
+
+  // ─── Shelters ────────────────────────────────────────────
+  {
+    id: 'nesher_shelter_school',
+    name: 'מקלט — בית ספר נשר',
+    category: 'shelter',
+    section: 'nesher',
+    address: 'נשר',
+    lat: 32.7760,
+    lng: 35.0372,
+    capacity: 200,
+  },
+  {
+    id: 'nesher_shelter_public',
+    name: 'מקלט ציבורי נשר',
+    category: 'shelter',
+    section: 'nesher',
+    address: 'נשר',
+    lat: 32.7745,
+    lng: 35.0365,
+    capacity: 150,
+  },
+
+  // ─── Community ───────────────────────────────────────────
+  {
+    id: 'nesher_community_center',
+    name: 'מרכז קהילתי נשר',
+    category: 'community',
+    section: 'nesher',
+    address: 'נשר',
+    lat: 32.7755,
+    lng: 35.0378,
+    phone: '04-8302500',
+    capacity: 500,
+  },
+
+  // ─── Hospital / Clinic ───────────────────────────────────
+  {
+    id: 'nesher_clinic',
+    name: 'מרפאה — נשר',
+    category: 'hospital',
+    section: 'nesher',
+    address: 'נשר',
+    lat: 32.7758,
+    lng: 35.0382,
+    phone: '04-8302400',
+  },
+
+  // ════════════════════════════════════════════════════════
+  // SECTION: עוספיא (Isfiya / Usufiyya)
+  // Druze town on Mount Carmel, adjacent to Daliat
+  // ════════════════════════════════════════════════════════
+
+  // ─── Emergency ──────────────────────────────────────────
+  {
+    id: 'isfiya_emergency_mda',
+    name: 'מד"א — עוספיא',
+    category: 'emergency',
+    section: 'isfiya',
+    address: 'עוספיא',
+    lat: 32.7262,
+    lng: 35.0658,
+    phone: '0529206967',
+    notes: 'מפקד: חוסיין עלו 053-8788898',
+  },
+  {
+    id: 'isfiya_emergency_fire',
+    name: 'כב"ה — עוספיא',
+    category: 'emergency',
+    section: 'isfiya',
+    address: 'עוספיא',
+    lat: 32.7258,
+    lng: 35.0652,
+    phone: '0526599616',
+  },
+  {
+    id: 'isfiya_emergency_police',
+    name: 'משטרה — עוספיא',
+    category: 'emergency',
+    section: 'isfiya',
+    address: 'עוספיא',
+    lat: 32.7265,
+    lng: 35.0662,
+    phone: '0538788898',
+  },
+
+  // ─── Schools ────────────────────────────────────────────
+  {
+    id: 'isfiya_school_yidudi_a',
+    name: 'בי"ס יסודי א\' עוספיא',
+    category: 'school',
+    section: 'isfiya',
+    address: 'עוספיא',
+    lat: 32.7270,
+    lng: 35.0648,
+    phone: '04-8592700',
+  },
+  {
+    id: 'isfiya_school_samara',
+    name: 'בי"ס סמארה',
+    category: 'school',
+    section: 'isfiya',
+    address: 'עוספיא',
+    lat: 32.7268,
+    lng: 35.0655,
+    phone: '04-8592701',
+  },
+  {
+    id: 'isfiya_school_amanah',
+    name: 'בי"ס אל-אמנה — תיכון',
+    category: 'school',
+    section: 'isfiya',
+    address: 'עוספיא',
+    lat: 32.7260,
+    lng: 35.0665,
+    phone: '04-8592787',
+  },
+  {
+    id: 'isfiya_school_technical',
+    name: 'בי"ס טכנולוגי עוספיא',
+    category: 'school',
+    section: 'isfiya',
+    address: 'עוספיא',
+    lat: 32.7272,
+    lng: 35.0642,
+    phone: '04-8592745',
+  },
+
+  // ─── Shelters ────────────────────────────────────────────
+  {
+    id: 'isfiya_shelter_school_a',
+    name: 'מקלט — בי"ס יסודי א\'',
+    category: 'shelter',
+    section: 'isfiya',
+    address: 'עוספיא',
+    lat: 32.7269,
+    lng: 35.0647,
+    capacity: 42,
+    notes: '4 יחידות, מרתף',
+  },
+  {
+    id: 'isfiya_shelter_hatib',
+    name: 'מקלט — בי"ס חאטב',
+    category: 'shelter',
+    section: 'isfiya',
+    address: 'עוספיא',
+    lat: 32.7264,
+    lng: 35.0658,
+    capacity: 105,
+  },
+  {
+    id: 'isfiya_shelter_yidudi_gimmel',
+    name: 'מקלט — בי"ס יסודי ג\'',
+    category: 'shelter',
+    section: 'isfiya',
+    address: 'עוספיא',
+    lat: 32.7258,
+    lng: 35.0670,
+    capacity: 100,
+  },
+  {
+    id: 'isfiya_shelter_tzekin',
+    name: 'מקלט — צקין דרקא',
+    category: 'shelter',
+    section: 'isfiya',
+    address: 'עוספיא',
+    lat: 32.7278,
+    lng: 35.0640,
+    capacity: 280,
+    notes: '4 יחידות של 70 מ"ר כל אחת',
+  },
+
+  // ─── Community Centers ───────────────────────────────────
+  {
+    id: 'isfiya_community_a',
+    name: 'מרכז קהילתי א\' — עוספיא',
+    category: 'community',
+    section: 'isfiya',
+    address: 'עוספיא',
+    lat: 32.7262,
+    lng: 35.0650,
+    capacity: 440,
+  },
+  {
+    id: 'isfiya_community_hatib',
+    name: 'מרכז קהילתי חאטב',
+    category: 'community',
+    section: 'isfiya',
+    address: 'עוספיא',
+    lat: 32.7255,
+    lng: 35.0663,
+    capacity: 700,
+  },
+  {
+    id: 'isfiya_community_tzekin',
+    name: 'מרכז קהילתי צקין דרקא',
+    category: 'community',
+    section: 'isfiya',
+    address: 'עוספיא',
+    lat: 32.7275,
+    lng: 35.0642,
+    capacity: 700,
+  },
+
+  // ─── Hospital ────────────────────────────────────────────
+  {
+    id: 'isfiya_clinic',
+    name: 'מרפאה — עוספיא',
+    category: 'hospital',
+    section: 'isfiya',
+    address: 'עוספיא',
+    lat: 32.7265,
+    lng: 35.0655,
+    phone: '04-8592700',
   },
 ]
