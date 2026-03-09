@@ -17,9 +17,6 @@ const SECTION_SHORT: Record<Section, string> = {
   hadar:         'הדר',
   neve_shanan:   'נווה שאנן',
   krayot:        'קריות',
-  daliat_carmel: 'דאלית',
-  nesher:        'נשר',
-  isfiya:        'עוספיא',
 }
 
 export const SectionFilter = ({ active, onChange, wrap = false, variant = 'chips' }: Props) => {

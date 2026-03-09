@@ -7,7 +7,6 @@ import {
 const ALL_SECTIONS: Section[] = [
   'west_haifa', 'ramat_carmel', 'tirat_carmel', 'carmel',
   'hadar', 'neve_shanan', 'krayot',
-  'daliat_carmel', 'nesher', 'isfiya',
 ]
 const ALL_CATEGORIES: Category[] = [
   'hospital', 'emergency', 'nursing_home',
@@ -23,9 +22,6 @@ const SECTION_SHORT: Record<Section, string> = {
   hadar:         'הדר',
   neve_shanan:   'נווה שאנן',
   krayot:        'קריות',
-  daliat_carmel: 'דאלית',
-  nesher:        'נשר',
-  isfiya:        'עוספיא',
 }
 
 const CATEGORY_SHORT: Record<Category, string> = {

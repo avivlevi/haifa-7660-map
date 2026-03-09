@@ -15,7 +15,6 @@ const ALL_CATEGORIES = new Set<Category>([
 const ALL_SECTIONS = new Set<Section>([
   'west_haifa', 'ramat_carmel', 'tirat_carmel', 'carmel',
   'hadar', 'neve_shanan', 'krayot',
-  'daliat_carmel', 'nesher', 'isfiya',
 ])
 
 const SHEET_HEADER_H  = 76   // collapsed: drag handle + header row

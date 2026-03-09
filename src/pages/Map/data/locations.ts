@@ -21,9 +21,6 @@ export type Section =
   | 'hadar'
   | 'neve_shanan'
   | 'krayot'
-  | 'daliat_carmel'
-  | 'nesher'
-  | 'isfiya'
 
 export interface Location {
   id: string
@@ -85,9 +82,6 @@ export const SECTION_LABELS: Record<Section, string> = {
   hadar:         'הדר ועיר תחתית',
   neve_shanan:   'נווה שאנן',
   krayot:        'קריות ומפרץ',
-  daliat_carmel: 'דאלית אל כרמל',
-  nesher:        'נשר',
-  isfiya:        'עוספיא',
 }
 
 export const SECTION_COLORS: Record<Section, string> = {
@@ -98,9 +92,6 @@ export const SECTION_COLORS: Record<Section, string> = {
   hadar:         '#EF4444', // red
   neve_shanan:   '#F97316', // orange
   krayot:        '#06B6D4', // cyan
-  daliat_carmel: '#84CC16', // lime
-  nesher:        '#8B5CF6', // violet
-  isfiya:        '#EC4899', // pink
 }
 
 export const LOCATIONS: Location[] = [
@@ -817,15 +808,6 @@ export const LOCATIONS: Location[] = [
 
   // ─── Gas stations ────────────────────────────────────────
   {
-    id: 'gas-1',
-    name: 'חוף כרמל פז',
-    category: 'gas',
-    section: 'west_haifa',
-    address: 'כביש 4, יציאה דרומה מחיפה',
-    lat: 32.7830,
-    lng: 34.9720,
-  },
-  {
     id: 'gas-2',
     name: 'מבואות חיפה דלק',
     category: 'gas',
@@ -1268,16 +1250,6 @@ export const LOCATIONS: Location[] = [
     lng: 34.9894,
     phone: '052-3325140',
   },
-  {
-    id: 'shelter-80',
-    name: 'מקלט 80',
-    category: 'shelter',
-    section: 'west_haifa',
-    address: 'אל עתיקה, חיפה',
-    lat: 32.8155,
-    lng: 34.9600,
-  },
-
   // ════════════════════════════════════════════════════════
   // SECTION: רמות כרמל — missing entries (added from PDF cross-check)
   // ════════════════════════════════════════════════════════
@@ -2858,29 +2830,6 @@ export const LOCATIONS: Location[] = [
     phone: '054-8042909',
     capacity: 67,
   },
-  {
-    id: 'krayot_welfare_yaarah',
-    name: 'הוסטל יערה — א.ד.נ.מ.',
-    category: 'welfare',
-    section: 'krayot',
-    address: 'קרית חיים',
-    lat: 32.8435,
-    lng: 35.0755,
-    phone: '050-8433366',
-    capacity: 16,
-  },
-  {
-    id: 'krayot_welfare_kasler',
-    name: 'אילן בית קסלר',
-    category: 'welfare',
-    section: 'krayot',
-    address: 'קרית חיים',
-    lat: 32.8425,
-    lng: 35.0750,
-    phone: '052-8750264',
-    capacity: 82,
-  },
-
   // ─── Evacuation / Community ──────────────────────────────
   {
     id: 'krayot_evac_nagler',
@@ -2910,420 +2859,17 @@ export const LOCATIONS: Location[] = [
     lng: 35.0730,
   },
 
-  // ════════════════════════════════════════════════════════
-  // SECTION: דאלית אל כרמל (Daliat al-Carmel)
-  // Population: 20,373 | Druze | Socioeconomic Cluster 4
-  // ════════════════════════════════════════════════════════
-
   // ─── Emergency ──────────────────────────────────────────
-  {
-    id: 'daliat_emergency_mda',
-    name: 'מד"א — דאלית אל כרמל',
-    category: 'emergency',
-    section: 'daliat_carmel',
-    address: 'דאלית אל כרמל',
-    lat: 32.6982,
-    lng: 35.0590,
-    phone: '0529206967',
-  },
-  {
-    id: 'daliat_emergency_fire',
-    name: 'כב"ה — דאלית אל כרמל',
-    category: 'emergency',
-    section: 'daliat_carmel',
-    address: 'דאלית אל כרמל',
-    lat: 32.6978,
-    lng: 35.0585,
-    phone: '0526599616',
-  },
-  {
-    id: 'daliat_emergency_police',
-    name: 'משטרה — דאלית אל כרמל',
-    category: 'emergency',
-    section: 'daliat_carmel',
-    address: 'דאלית אל כרמל',
-    lat: 32.6985,
-    lng: 35.0595,
-    phone: '0538788898',
-  },
-
   // ─── Schools ────────────────────────────────────────────
-  {
-    id: 'daliat_school_yidudi_a',
-    name: 'בי"ס יסודי א\'',
-    category: 'school',
-    section: 'daliat_carmel',
-    address: 'דאלית אל כרמל',
-    lat: 32.6992,
-    lng: 35.0572,
-    phone: '04-8390100',
-  },
-  {
-    id: 'daliat_school_yidudi_b',
-    name: 'בי"ס יסודי ב\'',
-    category: 'school',
-    section: 'daliat_carmel',
-    address: 'דאלית אל כרמל',
-    lat: 32.6988,
-    lng: 35.0580,
-    phone: '04-8390101',
-  },
-  {
-    id: 'daliat_school_high',
-    name: 'תיכון דאלית אל כרמל',
-    category: 'school',
-    section: 'daliat_carmel',
-    address: 'דאלית אל כרמל',
-    lat: 32.6975,
-    lng: 35.0600,
-    phone: '04-8390200',
-  },
-
   // ─── Community Centers / Shelters ───────────────────────
-  {
-    id: 'daliat_community_center_a',
-    name: 'מרכז קהילתי א\'',
-    category: 'community',
-    section: 'daliat_carmel',
-    address: 'דאלית אל כרמל',
-    lat: 32.6980,
-    lng: 35.0590,
-    capacity: 440,
-  },
-  {
-    id: 'daliat_community_center_b',
-    name: 'מרכז קהילתי ב\'',
-    category: 'community',
-    section: 'daliat_carmel',
-    address: 'דאלית אל כרמל',
-    lat: 32.6995,
-    lng: 35.0565,
-    capacity: 700,
-  },
-  {
-    id: 'daliat_shelter_school_a',
-    name: 'מקלט — בית ספר יסודי א\'',
-    category: 'shelter',
-    section: 'daliat_carmel',
-    address: 'דאלית אל כרמל',
-    lat: 32.6990,
-    lng: 35.0571,
-    capacity: 42,
-  },
-  {
-    id: 'daliat_shelter_school_b',
-    name: 'מקלט — בית ספר חאטב',
-    category: 'shelter',
-    section: 'daliat_carmel',
-    address: 'דאלית אל כרמל',
-    lat: 32.6985,
-    lng: 35.0578,
-    capacity: 105,
-  },
-  {
-    id: 'daliat_shelter_yidudi_gimmel',
-    name: 'מקלט — בי"ס יסודי ג\'',
-    category: 'shelter',
-    section: 'daliat_carmel',
-    address: 'דאלית אל כרמל',
-    lat: 32.6970,
-    lng: 35.0598,
-    capacity: 100,
-  },
-  {
-    id: 'daliat_shelter_tzekin',
-    name: 'מקלט — צקין דרקא',
-    category: 'shelter',
-    section: 'daliat_carmel',
-    address: 'דאלית אל כרמל',
-    lat: 32.7005,
-    lng: 35.0562,
-    capacity: 280,
-    notes: '4 יחידות של 70 מ"ר כל אחת',
-  },
-  {
-    id: 'daliat_welfare_blood_center',
-    name: 'מרכז תרומת דם',
-    category: 'welfare',
-    section: 'daliat_carmel',
-    address: 'דאלית אל כרמל',
-    lat: 32.6981,
-    lng: 35.0591,
-    notes: 'קואורדינטות: 35.057101, 32.698513',
-  },
-
-  // ════════════════════════════════════════════════════════
-  // SECTION: נשר (Nesher)
-  // Independent city adjacent to Haifa, SE slope of Carmel
-  // ════════════════════════════════════════════════════════
-
   // ─── Emergency ──────────────────────────────────────────
-  {
-    id: 'nesher_emergency_police',
-    name: 'משטרה — נשר',
-    category: 'emergency',
-    section: 'nesher',
-    address: 'נשר',
-    lat: 32.7750,
-    lng: 35.0380,
-    phone: '100',
-  },
-  {
-    id: 'nesher_emergency_mda',
-    name: 'מד"א — נשר',
-    category: 'emergency',
-    section: 'nesher',
-    address: 'נשר',
-    lat: 32.7748,
-    lng: 35.0375,
-    phone: '101',
-    notes: 'מפקד: דן דר 054-5212123',
-  },
-  {
-    id: 'nesher_emergency_fire',
-    name: 'כב"ה — נשר',
-    category: 'emergency',
-    section: 'nesher',
-    address: 'נשר',
-    lat: 32.7752,
-    lng: 35.0385,
-    phone: '102',
-  },
-
   // ─── Schools ────────────────────────────────────────────
-  {
-    id: 'nesher_school_1',
-    name: 'בי"ס יסודי א\' נשר',
-    category: 'school',
-    section: 'nesher',
-    address: 'נשר',
-    lat: 32.7762,
-    lng: 35.0370,
-    phone: '04-8302600',
-  },
-  {
-    id: 'nesher_school_tikhon',
-    name: 'תיכון נשר',
-    category: 'school',
-    section: 'nesher',
-    address: 'נשר',
-    lat: 32.7770,
-    lng: 35.0390,
-    phone: '04-8302700',
-  },
-
   // ─── Shelters ────────────────────────────────────────────
-  {
-    id: 'nesher_shelter_school',
-    name: 'מקלט — בית ספר נשר',
-    category: 'shelter',
-    section: 'nesher',
-    address: 'נשר',
-    lat: 32.7760,
-    lng: 35.0372,
-    capacity: 200,
-  },
-  {
-    id: 'nesher_shelter_public',
-    name: 'מקלט ציבורי נשר',
-    category: 'shelter',
-    section: 'nesher',
-    address: 'נשר',
-    lat: 32.7745,
-    lng: 35.0365,
-    capacity: 150,
-  },
-
   // ─── Community ───────────────────────────────────────────
-  {
-    id: 'nesher_community_center',
-    name: 'מרכז קהילתי נשר',
-    category: 'community',
-    section: 'nesher',
-    address: 'נשר',
-    lat: 32.7755,
-    lng: 35.0378,
-    phone: '04-8302500',
-    capacity: 500,
-  },
-
   // ─── Hospital / Clinic ───────────────────────────────────
-  {
-    id: 'nesher_clinic',
-    name: 'מרפאה — נשר',
-    category: 'hospital',
-    section: 'nesher',
-    address: 'נשר',
-    lat: 32.7758,
-    lng: 35.0382,
-    phone: '04-8302400',
-  },
-
-  // ════════════════════════════════════════════════════════
-  // SECTION: עוספיא (Isfiya / Usufiyya)
-  // Druze town on Mount Carmel, adjacent to Daliat
-  // ════════════════════════════════════════════════════════
-
   // ─── Emergency ──────────────────────────────────────────
-  {
-    id: 'isfiya_emergency_mda',
-    name: 'מד"א — עוספיא',
-    category: 'emergency',
-    section: 'isfiya',
-    address: 'עוספיא',
-    lat: 32.7262,
-    lng: 35.0658,
-    phone: '0529206967',
-    notes: 'מפקד: חוסיין עלו 053-8788898',
-  },
-  {
-    id: 'isfiya_emergency_fire',
-    name: 'כב"ה — עוספיא',
-    category: 'emergency',
-    section: 'isfiya',
-    address: 'עוספיא',
-    lat: 32.7258,
-    lng: 35.0652,
-    phone: '0526599616',
-  },
-  {
-    id: 'isfiya_emergency_police',
-    name: 'משטרה — עוספיא',
-    category: 'emergency',
-    section: 'isfiya',
-    address: 'עוספיא',
-    lat: 32.7265,
-    lng: 35.0662,
-    phone: '0538788898',
-  },
-
   // ─── Schools ────────────────────────────────────────────
-  {
-    id: 'isfiya_school_yidudi_a',
-    name: 'בי"ס יסודי א\' עוספיא',
-    category: 'school',
-    section: 'isfiya',
-    address: 'עוספיא',
-    lat: 32.7270,
-    lng: 35.0648,
-    phone: '04-8592700',
-  },
-  {
-    id: 'isfiya_school_samara',
-    name: 'בי"ס סמארה',
-    category: 'school',
-    section: 'isfiya',
-    address: 'עוספיא',
-    lat: 32.7268,
-    lng: 35.0655,
-    phone: '04-8592701',
-  },
-  {
-    id: 'isfiya_school_amanah',
-    name: 'בי"ס אל-אמנה — תיכון',
-    category: 'school',
-    section: 'isfiya',
-    address: 'עוספיא',
-    lat: 32.7260,
-    lng: 35.0665,
-    phone: '04-8592787',
-  },
-  {
-    id: 'isfiya_school_technical',
-    name: 'בי"ס טכנולוגי עוספיא',
-    category: 'school',
-    section: 'isfiya',
-    address: 'עוספיא',
-    lat: 32.7272,
-    lng: 35.0642,
-    phone: '04-8592745',
-  },
-
   // ─── Shelters ────────────────────────────────────────────
-  {
-    id: 'isfiya_shelter_school_a',
-    name: 'מקלט — בי"ס יסודי א\'',
-    category: 'shelter',
-    section: 'isfiya',
-    address: 'עוספיא',
-    lat: 32.7269,
-    lng: 35.0647,
-    capacity: 42,
-    notes: '4 יחידות, מרתף',
-  },
-  {
-    id: 'isfiya_shelter_hatib',
-    name: 'מקלט — בי"ס חאטב',
-    category: 'shelter',
-    section: 'isfiya',
-    address: 'עוספיא',
-    lat: 32.7264,
-    lng: 35.0658,
-    capacity: 105,
-  },
-  {
-    id: 'isfiya_shelter_yidudi_gimmel',
-    name: 'מקלט — בי"ס יסודי ג\'',
-    category: 'shelter',
-    section: 'isfiya',
-    address: 'עוספיא',
-    lat: 32.7258,
-    lng: 35.0670,
-    capacity: 100,
-  },
-  {
-    id: 'isfiya_shelter_tzekin',
-    name: 'מקלט — צקין דרקא',
-    category: 'shelter',
-    section: 'isfiya',
-    address: 'עוספיא',
-    lat: 32.7278,
-    lng: 35.0640,
-    capacity: 280,
-    notes: '4 יחידות של 70 מ"ר כל אחת',
-  },
-
   // ─── Community Centers ───────────────────────────────────
-  {
-    id: 'isfiya_community_a',
-    name: 'מרכז קהילתי א\' — עוספיא',
-    category: 'community',
-    section: 'isfiya',
-    address: 'עוספיא',
-    lat: 32.7262,
-    lng: 35.0650,
-    capacity: 440,
-  },
-  {
-    id: 'isfiya_community_hatib',
-    name: 'מרכז קהילתי חאטב',
-    category: 'community',
-    section: 'isfiya',
-    address: 'עוספיא',
-    lat: 32.7255,
-    lng: 35.0663,
-    capacity: 700,
-  },
-  {
-    id: 'isfiya_community_tzekin',
-    name: 'מרכז קהילתי צקין דרקא',
-    category: 'community',
-    section: 'isfiya',
-    address: 'עוספיא',
-    lat: 32.7275,
-    lng: 35.0642,
-    capacity: 700,
-  },
-
   // ─── Hospital ────────────────────────────────────────────
-  {
-    id: 'isfiya_clinic',
-    name: 'מרפאה — עוספיא',
-    category: 'hospital',
-    section: 'isfiya',
-    address: 'עוספיא',
-    lat: 32.7265,
-    lng: 35.0655,
-    phone: '04-8592700',
-  },
 ]

@@ -5,7 +5,7 @@ import type { LucideIcon } from 'lucide-react'
 import { MapContainer, TileLayer, Marker, Popup, Circle, useMapEvents, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import type { Location } from '../data/locations'
-import { CATEGORY_COLORS, CATEGORY_LABELS, CATEGORY_ICONS } from '../data/locations'
+import { CATEGORY_COLORS, CATEGORY_LABELS, CATEGORY_ICONS, SECTION_LABELS, SECTION_COLORS } from '../data/locations'
 import type { LocationWithDistance } from '../hooks/useNearbyLocations'
 
 // Fix Leaflet default icon paths broken by Vite
@@ -197,21 +197,34 @@ export const MapView = ({
           >
             <Popup minWidth={200}>
               <div style={{ direction: 'rtl', textAlign: 'right', minWidth: 200, fontFamily: 'inherit' }}>
-                {/* Category badge */}
-                <span style={{
-                  display: 'inline-flex', alignItems: 'center', gap: 4,
-                  backgroundColor: `${color}20`,
-                  color,
-                  fontSize: 10,
-                  fontWeight: 700,
-                  padding: '2px 7px',
-                  borderRadius: 99,
-                  marginBottom: 5,
-                  border: `1px solid ${color}40`,
-                }}>
-                  <LocIcon size={10} />
-                  {CATEGORY_LABELS[loc.category]}
-                </span>
+                {/* Category + Section badges */}
+                <div style={{ display: 'flex', gap: 4, flexWrap: 'wrap', marginBottom: 5 }}>
+                  <span style={{
+                    display: 'inline-flex', alignItems: 'center', gap: 4,
+                    backgroundColor: `${color}20`,
+                    color,
+                    fontSize: 10,
+                    fontWeight: 700,
+                    padding: '2px 7px',
+                    borderRadius: 99,
+                    border: `1px solid ${color}40`,
+                  }}>
+                    <LocIcon size={10} />
+                    {CATEGORY_LABELS[loc.category]}
+                  </span>
+                  <span style={{
+                    display: 'inline-flex', alignItems: 'center',
+                    backgroundColor: `${SECTION_COLORS[loc.section]}20`,
+                    color: SECTION_COLORS[loc.section],
+                    fontSize: 10,
+                    fontWeight: 700,
+                    padding: '2px 7px',
+                    borderRadius: 99,
+                    border: `1px solid ${SECTION_COLORS[loc.section]}40`,
+                  }}>
+                    {SECTION_LABELS[loc.section]}
+                  </span>
+                </div>
 
                 {/* Name */}
                 <p style={{ margin: '0 0 6px', fontSize: 14, fontWeight: 700, color: '#111' }}>{loc.name}</p>
