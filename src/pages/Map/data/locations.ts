@@ -741,8 +741,8 @@ export const LOCATIONS: Location[] = [
     category: 'shelter',
     section: 'west_haifa',
     address: 'המלך דוד 26, חיפה',
-    lat: 32.8108,
-    lng: 34.9588,
+    lat: 32.8124,
+    lng: 34.9583,
     notes: 'ליד בית הכנסת',
   },
   {
@@ -751,8 +751,8 @@ export const LOCATIONS: Location[] = [
     category: 'shelter',
     section: 'west_haifa',
     address: 'המלך דוד 7, חיפה',
-    lat: 32.8107,
-    lng: 34.9588,
+    lat: 32.8095,
+    lng: 34.9592,
   },
   {
     id: 'shelter-84',
@@ -801,8 +801,8 @@ export const LOCATIONS: Location[] = [
     category: 'food',
     section: 'west_haifa',
     address: 'שמואל שלוסברג 1, חיפה',
-    lat: 32.817557,
-    lng: 34.9584166,
+    lat: 32.8173269,
+    lng: 34.960833,
     phone: '074-7157177',
   },
 
