@@ -1,3 +1,4 @@
+import { memo } from 'react'
 import type React from 'react'
 import { Navigation2 } from 'lucide-react'
 import type { LocationWithDistance } from '../hooks/useNearbyLocations'
@@ -20,7 +21,7 @@ function mapsUrl(lat: number, lng: number) {
   return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`
 }
 
-export const LocationCard = ({ location, onClick, selected, className = '', style: extraStyle }: Props) => {
+export const LocationCard = memo(({ location, onClick, selected, className = '', style: extraStyle }: Props) => {
   const color = CATEGORY_COLORS[location.category]
   const Icon  = CATEGORY_ICONS[location.category]
 
@@ -76,4 +77,4 @@ export const LocationCard = ({ location, onClick, selected, className = '', styl
       </div>
     </div>
   )
-}
+})

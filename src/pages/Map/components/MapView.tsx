@@ -1,4 +1,4 @@
-import { useEffect, useRef, createElement } from 'react'
+import { useEffect, useRef, useMemo, createElement } from 'react'
 import { renderToStaticMarkup } from 'react-dom/server'
 import { Navigation2 } from 'lucide-react'
 import type { LucideIcon } from 'lucide-react'
@@ -16,8 +16,13 @@ import markerShadow from 'leaflet/dist/images/marker-shadow.png'
 delete (L.Icon.Default.prototype as { _getIconUrl?: unknown })._getIconUrl
 L.Icon.Default.mergeOptions({ iconUrl: markerIcon, iconRetinaUrl: markerIcon2x, shadowUrl: markerShadow })
 
-/** Create a colored circle marker with a category icon inside */
+/** Module-level cache — key = "color|size|iconName". Avoids recreating icons on every render. */
+const _iconCache = new Map<string, L.DivIcon>()
+
+/** Create a colored circle marker with a category icon inside (cached) */
 function makeIcon(color: string, Icon: LucideIcon, size = 30) {
+  const key = `${color}|${size}|${Icon.displayName ?? Icon.name}`
+  if (_iconCache.has(key)) return _iconCache.get(key)!
   const iconPx = Math.round(size * 0.46)
   const iconHtml = renderToStaticMarkup(
     createElement(Icon, { size: iconPx, color: 'white', strokeWidth: 2.5 })
@@ -30,13 +35,15 @@ function makeIcon(color: string, Icon: LucideIcon, size = 30) {
     box-shadow:0 2px 10px rgba(0,0,0,0.30);
     display:flex;align-items:center;justify-content:center;
   ">${iconHtml}</div>`
-  return L.divIcon({
+  const icon = L.divIcon({
     html,
     className: '',
     iconSize: [size, size],
     iconAnchor: [size / 2, size / 2],
     popupAnchor: [0, -(size / 2 + 4)],
   })
+  _iconCache.set(key, icon)
+  return icon
 }
 
 /** Red explosion pin for the incident */
@@ -126,7 +133,7 @@ export const MapView = ({
   onMapClick,
   onMarkerClick,
 }: Props) => {
-  const nearbyIds = new Set(nearby.map(l => l.id))
+  const nearbyIds = useMemo(() => new Set(nearby.map(l => l.id)), [nearby])
 
   return (
     <MapContainer
